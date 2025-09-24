@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- ==================== HEAD SECTION ==================== -->
+<head>
+  <meta charset="UTF-8" />
+  <title>Resume Builder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+IDx0aXRsZSBpZD0idGl0bGUiPkFJLVBvd2VyZWQgUmVzdW1lPC90aXRsZT4gPGRlc2MgaWQ9ImRlc2MiPkRvY3VtZW50IGljb24gd2l0aCBBSSBzcGFya2xlcyBmb3IgcmVzdW1lIGJ1aWxkaW5nPC9kZXNjPiA8cmVjdCB4PSI4IiB5PSI0IiB3aWR0aD0iMTYiIGhlaWdodD0iMjQiIHJ4PSIyIiBmaWxsPSIjZjNmNGY2IiBzdHJva2U9IiM0Yjc0ODgiIHN0cm9rZS13aWR0aD0iMS41Ii8+IDxyZWN0IHg9IjEwIiB5PSI4IiB3aWR0aD0iMTIiIGhlaWdodD0iMiIgZmlsbD0iIzM3NDE1MSIvPiA8cmVjdCB4PSIxMCIgeT0iMTIiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxLjUiIGZpbGw9IiM2Yjc0ODgiLz4gPHJlY3QgeD0iMTAiIHk9IjE1IiB3aWR0aD0iOCIgaGVpZ2h0PSIxLjUiIGZpbGw9IiM2Yjc0ODgiLz4gPHJlY3QgeD0iMTAiIHk9IjE4IiB3aWR0aD0iMTEiIGhlaWdodD0iMS41IiBmaWxsPSIjNmI3NDg4Ii8+IDxyZWN0IHg9IjEwIiB5PSIyMSIgd2lkdGg9IjkiIGhlaWdodD0iMS41IiBmaWxsPSIjNmI3NDg4Ii8+IDxwYXRoIGQ9Ik0yNiA2bDAuNi0xLjIgMC42IDEuMiAxLjIgMC42LTEuMiAwLjYtMC42IDEuMi0wLjYtMS4yLTEuMi0wLjZ6IiBmaWxsPSIjMzc0MTUxIiBzdHJva2U9IiM2Yjc0ODgiIHN0cm9rZS13aWR0aD0iMC40Ii8+IDxwYXRoIGQ9Ik0yOCAxNGwwLjUtMSAwLjUgMSAxIDAuNS0xIDAuNS0wLjUgMS0wLjUtMS0xLTAuNXoiIGZpbGw9IiMzNzQxNTEiIHN0cm9rZT0iIzZiNzQ4OCIgc3Ryb2tlLXdpZHRoPSIwLjQiLz4gPHBhdGggZD0iTTQgMTBsMC41LTEgMC41IDEgMSAwLjUtMSAwLjUtMC41IDEtMC41LTEtMS0wLjV6IiBmaWxsPSIjMzc0MTUxIiBzdHJva2U9IiM2Yjc0ODgiIHN0cm9rZS13aWR0aD0iMC40Ii8+IDxjaXJjbGUgY3g9IjI2IiBjeT0iMjIiIHI9IjAuNSIgZmlsbD0iIzM3NDE1MSIvPiA8Y2lyY2xlIGN4PSI1IiBjeT0iMjAiIHI9IjAuNCIgZmlsbD0iIzM3NDE1MSIvPiA8L3N2Zz4=" />
+  
+  <!-- External Dependencies -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  
+  <!-- Custom Styles -->
+  <style>
+    /* Modal Styles */
+    #progressModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+    #progressBox {
+      background: white;
+      padding: 16px 20px;
+      border-radius: 10px;
+      width: 460px;
+      max-height: 70vh;
+      overflow-y: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    }
+    #addItemModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 60;
+    }
+    #addItemBox {
+      background: white;
+      padding: 24px;
+      border-radius: 10px;
+      width: 400px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    }
+    
+    /* Premium Icon Button Animations */
+    .premium-icon-btn {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .premium-icon-btn::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: rotate(45deg);
+      animation: shimmer 3s infinite;
+    }
+    
+    .premium-icon-btn svg {
+      animation: sparkle 2s ease-in-out infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+      100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    }
+    
+    @keyframes sparkle {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      25% { transform: scale(1.05) rotate(2deg); }
+      50% { transform: scale(1.1) rotate(0deg); }
+      75% { transform: scale(1.05) rotate(-2deg); }
+    }
+    
+    .premium-icon-btn:hover {
+      box-shadow: 0 0 20px rgba(250, 204, 21, 0.4);
+    }
+    
+    .premium-icon-btn:hover svg {
+      filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.6));
+    }
+    
+    /* Resume Preview Modal Styles */
+    .modal-overlay {
+      position: fixed !important;
+      inset: 0 !important;
+      background: rgba(0, 0, 0, 0.8) !important;
+      display: none !important;
+      align-items: center !important;
+      justify-content: center !important;
+      z-index: 9999 !important;
+      backdrop-filter: blur(4px);
+    }
+    
+    .modal-container {
+      background: white;
+      border-radius: 12px;
+      width: 90vw;
+      max-width: 900px;
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+    
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    
+    .save-pdf-btn {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .save-pdf-btn:hover {
+      background: #059669;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    
+    .close-btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .close-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+    
+    .modal-content {
+      flex: 1;
+      overflow: auto;
+      padding: 24px;
+      background: #f8fafc;
+    }
+    
+    .resume-preview-content {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      max-width: 100%;
+    }
+    
+    .resume-preview-content iframe {
+      width: 100%;
+      height: 800px;
+      border: none;
+      display: block;
+    }
+    
+    /* Premium Modal Styles */
+    #premiumModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 70;
+    }
+    
+    #premiumBox {
+      background: white;
+      padding: 32px;
+      border-radius: 16px;
+      width: 400px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      border: 2px solid #facc15;
+    }
+  </style>
+</head>
+
+<!-- ==================== BODY CONTENT ==================== -->
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
+  
+  <!-- Main Container -->
+  <div class="container mx-auto px-4 py-6 max-w-7xl">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- ==================== LEFT COLUMN - Main Content ==================== -->
+      <div class="lg:col-span-2 space-y-6">
+        
+        <!-- Header Section -->
+        <div class="text-center lg:text-left">
+          <h1 class="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Resume Builder</h1>
+          <p class="text-gray-600 mt-2">AI-powered resume tailoring with intelligent job analysis</p>
+        </div>
+
+        <!-- Job Field Selection -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <label class="block text-sm font-semibold text-gray-700 mb-3">Job Field</label>
+          <select id="jobFieldSelect" class="w-full border border-gray-300 rounded-lg p-3 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+            <option value="technology">Technology / Software</option>
+            <option value="healthcare">Healthcare / Medical</option>
+            <option value="finance">Finance / Banking</option>
+            <option value="marketing">Marketing / Sales</option>
+            <option value="education">Education / Academia</option>
+            <option value="engineering">Engineering / Manufacturing</option>
+            <option value="consulting">Consulting / Business</option>
+            <option value="creative">Creative / Design</option>
+            <option value="legal">Legal & Compliance</option>
+            <option value="nonprofit">Non-profit / Social</option>
+          </select>
+        </div>
+
+        <!-- Profile Picture Upload -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <label class="block text-sm font-semibold text-gray-700 mb-3">Profile Picture (Optional)</label>
+          <p class="text-xs text-gray-500 px-1 -mt-1 mb-3">Upload a professional headshot to include in your resume template</p>
+          <div class="flex items-center space-x-4">
+            <input type="file" id="profilePictureInput" accept="image/*" class="hidden" />
+            <button onclick="document.getElementById('profilePictureInput').click()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+              Choose Image
+            </button>
+            <div id="profilePicturePreview" class="flex items-center space-x-2" style="display: none;">
+              <img id="profilePictureImg" src="" alt="Profile preview" class="w-12 h-12 rounded-full object-cover border-2 border-gray-300" />
+              <span id="profilePictureFileName" class="text-sm text-gray-600"></span>
+              <button onclick="removeProfilePicture()" class="text-red-600 hover:text-red-800 text-sm font-medium">
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Current Resume Input -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <label class="block text-sm font-semibold text-gray-700 mb-3">Current Resume</label>
+          <p class="text-xs text-gray-500 px-1 -mt-1 mb-3">Paste your existing resume content that will be tailored for the specific job</p>
+          <textarea id="currentResumeText" rows="8" placeholder="Paste your current resume here for tailoring..." class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-vertical font-mono text-sm"></textarea>
+        </div>
+
+        <!-- Resume Guidelines -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <label class="block text-sm font-semibold text-gray-700 mb-3">Resume Guidelines</label>
+          <p class="text-xs text-gray-500 px-1 -mt-1 mb-3">Rules that guide AI's resume formatting and writing style</p>
+          <div id="resumeGuidelines-container" class="min-h-[200px] border border-gray-200 rounded-lg p-3 bg-gray-50 space-y-2 mb-3">
+            <!-- Items will be populated here -->
+          </div>
+          <button onclick="addItemToBank('resumeGuidelines')" class="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium">
+            + Add Guideline
+          </button>
+        </div>
+
+        <!-- Text Analyzer -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Job Description Analyzer</h3>
+          <p class="text-xs text-gray-500 px-1 -mt-1 mb-3">Paste job descriptions to extract key phrases for your resume word banks</p>
+          <textarea id="analyzerText" rows="6" placeholder="Paste job description here..." class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-vertical mb-3"></textarea>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="analyzeText('actionVerbs')" class="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+              Extract Action Verbs
+            </button>
+            <button onclick="analyzeText('skillsKeywords')" class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium">
+              Extract Skills
+            </button>
+            <button onclick="analyzeText('achievementPhrases')" class="bg-purple-600 text-white px-3 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium">
+              Extract Achievements
+            </button>
+            <button onclick="analyzeText('industryTerms')" class="bg-orange-600 text-white px-3 py-2 rounded-lg hover:bg-orange-700 transition-colors text-sm font-medium">
+              Extract Industry Terms
+            </button>
+            <button onclick="analyzeText('all')" class="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 transition-colors text-sm font-medium">
+              Analyze All
+            </button>
+          </div>
+        </div>
+
+        <!-- Generate Button -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-6">
+          <div class="space-y-4">
+            <div class="flex items-center space-x-3">
+              <input type="checkbox" id="enableRefinement" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+              <label for="enableRefinement" class="text-sm font-medium text-gray-700">Enable AI refinement (2 passes)</label>
+            </div>
+            <div class="text-xs text-gray-500 ml-7">Improves quality but uses more tokens</div>
+          </div>
+          <div class="flex items-center gap-3">
+            <button id="generateBtn" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-4 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center">
+              Generate Tailored Resume
+            </button>
+            <button id="premiumBtn" onclick="showPremiumModal()" class="premium-icon-btn bg-gradient-to-r from-green-500 to-green-600 hover:from-yellow-400 hover:to-yellow-500 text-white hover:text-yellow-900 px-4 py-4 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center">
+              <svg width="40" height="40" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="premium-title premium-desc">
+                <title id="premium-title">Premium Service</title>
+                <desc id="premium-desc">Golden award seal with AI magic sparkles</desc>
+                <circle cx="16" cy="12" r="6" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
+                <circle cx="16" cy="12" r="3" fill="#fde68a" stroke="#ca8a04" stroke-width="1"/>
+                <path d="M14 18v6l2-2 2 2v-6z" fill="#facc15" stroke="#ca8a04" stroke-width="1"/>
+                <path d="M10 7l0.7-1.4 0.7 1.4 1.4 0.7-1.4 0.7-0.7 1.4-0.7-1.4-1.4-0.7z" fill="#fde68a" stroke="#facc15" stroke-width="0.4"/>
+                <path d="M22 6l0.6-1.2 0.6 1.2 1.2 0.6-1.2 0.6-0.6 1.2-0.6-1.2-1.2-0.6z" fill="#fde68a" stroke="#facc15" stroke-width="0.4"/>
+                <path d="M25 14l0.6-1.2 0.6 1.2 1.2 0.6-1.2 0.6-0.6 1.2-0.6-1.2-1.2-0.6z" fill="#fde68a" stroke="#facc15" stroke-width="0.4"/>
+                <path d="M11 22l0.5-1 0.5 1 1 0.5-1 0.5-0.5 1-0.5-1-1-0.5z" fill="#fde68a" stroke="#facc15" stroke-width="0.4"/>
+                <circle cx="19" cy="10" r="0.5" fill="#fde68a"/>
+                <circle cx="13" cy="16" r="0.4" fill="#fde68a"/>
+                <circle cx="21" cy="18" r="0.5" fill="#fde68a"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tailored Resume Output -->
+        <div id="outputSection" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6" style="display: none;">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">Tailored Resume</h3>
+            <div class="flex space-x-2">
+              <button id="copyBtn" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium">
+                Copy Text
+              </button>
+              <button id="downloadPdfBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+                Download PDF
+              </button>
+            </div>
+          </div>
+          <div id="outputText" class="bg-gray-50 border border-gray-200 rounded-lg p-4 max-h-96 overflow-y-auto font-mono text-sm whitespace-pre-wrap">
+            <!-- Tailored resume will appear here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== RIGHT COLUMN - Phrase Banks ==================== -->
+      <div class="space-y-6">
+        
+        <!-- Action Verbs Word Bank -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Action Verbs</h3>
+          <p class="text-xs text-gray-500 px-1 -mt-1 mb-2">Strong action verbs to start resume bullet points, e.g., "Developed", "Led"</p>
+          <div id="actionVerbs-container" class="min-h-[120px] border border-gray-200 rounded-lg p-3 bg-gray-50 space-y-2 mb-3">
+            <!-- Items will be populated here -->
+          </div>
+          <button onclick="addItemToBank('actionVerbs')" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+            + Add Action Verb
+          </button>
+        </div>
+
+        <!-- Skills Keywords Word Bank -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Skills Keywords</h3>
+          <p class="text-xs text-gray-500 px-1 -mt-1 mb-2">Technical and soft skills relevant to your field, e.g., "Python", "Leadership"</p>
+          <div id="skillsKeywords-container" class="min-h-[120px] border border-gray-200 rounded-lg p-3 bg-gray-50 space-y-2 mb-3">
+            <!-- Items will be populated here -->
+          </div>
+          <button onclick="addItemToBank('skillsKeywords')" class="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium">
+            + Add Skill
+          </button>
+        </div>
+
+        <!-- Achievement Phrases Word Bank -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Achievement Phrases</h3>
+          <p class="text-xs text-gray-500 px-1 -mt-1 mb-2">Quantifiable accomplishment phrases, e.g., "increased by 25%", "reduced costs"</p>
+          <div id="achievementPhrases-container" class="min-h-[120px] border border-gray-200 rounded-lg p-3 bg-gray-50 space-y-2 mb-3">
+            <!-- Items will be populated here -->
+          </div>
+          <button onclick="addItemToBank('achievementPhrases')" class="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium">
+            + Add Achievement
+          </button>
+        </div>
+
+        <!-- Industry Terms Word Bank -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Industry Terms</h3>
+          <p class="text-xs text-gray-500 px-1 -mt-1 mb-2">Field-specific terminology and buzzwords, e.g., "Agile", "ROI", "UX/UI"</p>
+          <div id="industryTerms-container" class="min-h-[120px] border border-gray-200 rounded-lg p-3 bg-gray-50 space-y-2 mb-3">
+            <!-- Items will be populated here -->
+          </div>
+          <button onclick="addItemToBank('industryTerms')" class="w-full bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors text-sm font-medium">
+            + Add Term
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODALS ==================== -->
+  
+  <!-- Analysis Review Modal -->
+  <div id="analysisModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none;">
+    <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-bold text-gray-800">Analysis Results</h2>
+          <button id="closeAnalysisModal" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+        </div>
+        <p class="text-sm text-gray-600 mt-1">Review and select phrases to add to your word banks</p>
+      </div>
+      
+      <div class="p-6 overflow-y-auto max-h-[60vh]">
+        <div id="analysisResults" class="space-y-6">
+          <!-- Analysis results will be populated here -->
+        </div>
+      </div>
+      
+      <div class="p-6 border-t border-gray-200 bg-gray-50">
+        <div class="flex justify-between items-center">
+          <div class="flex space-x-4">
+            <button id="selectAllAnalysis" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">Select All</button>
+            <button id="deselectAllAnalysis" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">Deselect All</button>
+          </div>
+          <div class="flex space-x-3">
+            <button id="cancelAnalysis" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">Cancel</button>
+            <button id="addSelectedPhrases" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">Add Selected</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Modal -->
+  <div id="progressModal">
+    <div id="progressBox">
+      <div id="progressPhase" class="font-bold mb-2">Initializing...</div>
+      <div id="progressLog" class="whitespace-pre-wrap text-xs text-gray-600 max-h-60 overflow-y-auto"></div>
+      <button id="closeModalBtn" style="display:none;" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded w-full">Close</button>
+    </div>
+  </div>
+
+  <!-- Add Item Modal -->
+  <div id="addItemModal">
+    <div id="addItemBox">
+      <h3 id="modalTitle" class="text-lg font-semibold mb-4">Add Item</h3>
+      <textarea id="modalInput" rows="3" placeholder="Enter your item..." class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-vertical"></textarea>
+      <div class="flex space-x-3 mt-4">
+        <button onclick="hideModal()" class="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors">Cancel</button>
+        <button id="modalAddBtn" class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Premium Service Modal -->
+  <div id="premiumModal">
+    <div id="premiumBox">
+      <div class="mb-6">
+        <svg width="48" height="48" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="mx-auto mb-4">
+          <circle cx="16" cy="12" r="6" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
+          <circle cx="16" cy="12" r="3" fill="#fde68a" stroke="#ca8a04" stroke-width="1"/>
+          <path d="M14 18v6l2-2 2 2v-6z" fill="#facc15" stroke="#ca8a04" stroke-width="1"/>
+          <path d="M10 7l0.7-1.4 0.7 1.4 1.4 0.7-1.4 0.7-0.7 1.4-0.7-1.4-1.4-0.7z" fill="#fde68a" stroke="#facc15" stroke-width="0.4"/>
+          <path d="M22 6l0.6-1.2 0.6 1.2 1.2 0.6-1.2 0.6-0.6 1.2-0.6-1.2-1.2-0.6z" fill="#fde68a" stroke="#facc15" stroke-width="0.4"/>
+          <path d="M25 14l0.6-1.2 0.6 1.2 1.2 0.6-1.2 0.6-0.6 1.2-0.6-1.2-1.2-0.6z" fill="#fde68a" stroke="#facc15" stroke-width="0.4"/>
+          <path d="M11 22l0.5-1 0.5 1 1 0.5-1 0.5-0.5 1-0.5-1-1-0.5z" fill="#fde68a" stroke="#facc15" stroke-width="0.4"/>
+          <circle cx="19" cy="10" r="0.5" fill="#fde68a"/>
+          <circle cx="13" cy="16" r="0.4" fill="#fde68a"/>
+          <circle cx="21" cy="18" r="0.5" fill="#fde68a"/>
+        </svg>
+        <h3 class="text-2xl font-bold text-gray-800 mb-2">Enjoying this?</h3>
+        <p class="text-gray-600 text-lg">Join our Premium service!</p>
+      </div>
+      <div class="space-y-3 mb-6 text-left">
+        <div class="flex items-center space-x-3">
+          <div class="w-2 h-2 bg-yellow-400 rounded-full"></div>
+          <span class="text-gray-700">Unlimited resume generations</span>
+        </div>
+        <div class="flex items-center space-x-3">
+          <div class="w-2 h-2 bg-yellow-400 rounded-full"></div>
+          <span class="text-gray-700">Advanced AI resume optimization</span>
+        </div>
+        <div class="flex items-center space-x-3">
+          <div class="w-2 h-2 bg-yellow-400 rounded-full"></div>
+          <span class="text-gray-700">Priority support & updates</span>
+        </div>
+      </div>
+      <div class="flex space-x-3">
+        <button onclick="hidePremiumModal()" class="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors">Maybe Later</button>
+        <button class="flex-1 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-yellow-900 px-4 py-2 rounded-lg font-semibold transition-all">Learn More</button>
+      </div>
+    </div>
+  </div>
+
+<!-- ==================== JAVASCRIPT SECTION ==================== -->
+<script>
+  /* ==================== JOB FIELD PRESETS ==================== */
+  const jobFields = {
+    technology: {
+      actionVerbs: "Developed\nImplemented\nOptimized\nArchitected\nDebugged\nAutomated\nIntegrated\nDeployed\nMaintained\nRefactored",
+      skillsKeywords: "JavaScript\nPython\nReact\nNode.js\nAWS\nDocker\nKubernetes\nAgile\nScrum\nGit",
+      achievementPhrases: "Increased system performance by\nReduced load time by\nImproved code efficiency\nLed development team of\nDelivered project ahead of schedule\nScaled application to handle",
+      industryTerms: "Full-stack\nDevOps\nCI/CD\nMicroservices\nAPI\nDatabase\nCloud computing\nMachine learning\nArtificial intelligence\nSoftware architecture",
+      resumeGuidelines: "1. Start each bullet point with a strong action verb (developed, implemented, optimized, led, etc.)\n2. Quantify achievements with specific metrics (increased performance by 40%, managed team of 12, reduced costs by $50K)\n3. Use the STAR method: Situation, Task, Action, Result for complex achievements\n4. Tailor technical skills to match job requirements and include proficiency levels\n5. Keep bullet points concise (1-2 lines max) but impactful\n6. Use reverse chronological order with consistent formatting\n7. Include relevant certifications, training, and continuous learning initiatives\n8. Highlight cross-functional collaboration and leadership experience\n9. Focus on business impact and problem-solving capabilities\n10. Proofread for grammar, consistency, and ATS-friendly formatting"
+    },
+    healthcare: {
+      actionVerbs: "Administered\nDiagnosed\nTreated\nMonitored\nAssessed\nCounseled\nEducated\nCoordinated\nDocumented\nCollaborated",
+      skillsKeywords: "Patient care\nMedical records\nClinical assessment\nPharmacology\nInfection control\nEMR systems\nCPR certified\nBLS\nACLS\nHIPAA compliance",
+      achievementPhrases: "Improved patient satisfaction scores by\nReduced readmission rates\nManaged caseload of\nImplemented safety protocols\nTrained staff on\nAchieved quality metrics",
+      industryTerms: "Evidence-based practice\nInterdisciplinary team\nQuality assurance\nPatient advocacy\nClinical protocols\nHealthcare informatics\nTelehealth\nPopulation health\nContinuous improvement\nRegulatory compliance",
+      resumeGuidelines: "1. Highlight patient care experience and clinical skills.\n2. Include relevant certifications and licenses.\n3. Emphasize compliance with healthcare regulations.\n4. Quantify patient outcomes and quality improvements.\n5. Show commitment to continuing education and professional development."
+    },
+    finance: {
+      actionVerbs: "Analyzed\nForecasted\nBudgeted\nAudited\nReconciled\nValued\nModeled\nOptimized\nNegotiated\nManaged",
+      skillsKeywords: "Financial modeling\nRisk analysis\nExcel\nSQL\nTableau\nBloomberg\nGAAP\nIFRS\nCompliance\nPortfolio management",
+      achievementPhrases: "Increased revenue by\nReduced costs by\nManaged portfolio worth\nImproved ROI\nStreamlined processes\nIdentified savings of",
+      industryTerms: "Due diligence\nAsset management\nDerivatives\nHedge funds\nPrivate equity\nInvestment banking\nCredit analysis\nRegulatory reporting\nCapital markets\nFinancial planning",
+      resumeGuidelines: "1. Quantify financial impact and achievements with specific numbers.\n2. Highlight analytical and technical skills.\n3. Include relevant certifications (CFA, CPA, FRM).\n4. Emphasize regulatory knowledge and compliance experience.\n5. Show experience with financial software and modeling tools."
+    },
+    marketing: {
+      actionVerbs: "Launched\nPromoted\nStrategized\nTargeted\nEngaged\nOptimized\nAnalyzed\nCreated\nExecuted\nMeasured",
+      skillsKeywords: "Digital marketing\nSEO\nSEM\nSocial media\nContent marketing\nGoogle Analytics\nHubSpot\nSalesforce\nA/B testing\nMarketing automation",
+      achievementPhrases: "Increased brand awareness by\nGenerated leads worth\nImproved conversion rates\nGrew social media following\nLaunched successful campaigns\nAchieved ROI of",
+      industryTerms: "Customer acquisition\nBrand positioning\nMarket segmentation\nLead generation\nCustomer journey\nOmnichannel\nInfluencer marketing\nPerformance marketing\nMarketing funnel\nCustomer lifetime value",
+      resumeGuidelines: "1. Quantify marketing results with metrics (CTR, conversion rates, ROI).\n2. Highlight experience with digital marketing tools and platforms.\n3. Show creativity and strategic thinking in campaigns.\n4. Include experience with data analysis and performance optimization.\n5. Demonstrate understanding of customer behavior and market trends."
+    },
+    sales: {
+      actionVerbs: "Sold\nNegotiated\nClosed\nProspected\nPresented\nBuilt\nMaintained\nExceeded\nGenerated\nConverted",
+      skillsKeywords: "CRM\nSalesforce\nLead generation\nAccount management\nB2B sales\nB2C sales\nSales forecasting\nPipeline management\nCustomer retention\nSales analytics",
+      achievementPhrases: "Exceeded quota by\nGenerated revenue of\nClosed deals worth\nBuilt territory from\nAchieved retention rate of\nRanked top performer",
+      industryTerms: "Sales cycle\nProspecting\nQualification\nSolution selling\nConsultative selling\nAccount-based selling\nSales enablement\nCustomer success\nUpselling\nCross-selling",
+      resumeGuidelines: "1. Lead with quantifiable sales achievements and quota performance.\n2. Highlight relationship-building and communication skills.\n3. Include experience with CRM systems and sales tools.\n4. Show progression in sales targets and territory growth.\n5. Emphasize customer satisfaction and retention metrics."
+    }
+  };
+
+  /* ==================== JOB FIELD MANAGEMENT ==================== */
+  function loadJobField(type) {
+    const jobField = jobFields[type];
+    if (!jobField) return;
+
+    // Load each word bank
+    displayItemsInContainer('actionVerbs', jobField.actionVerbs.split('\n'));
+    displayItemsInContainer('skillsKeywords', jobField.skillsKeywords.split('\n'));
+    displayItemsInContainer('achievementPhrases', jobField.achievementPhrases.split('\n'));
+    displayItemsInContainer('industryTerms', jobField.industryTerms.split('\n'));
+    displayItemsInContainer('resumeGuidelines', jobField.resumeGuidelines.split('\n'));
+  }
+
+  /* ==================== UTILITY FUNCTIONS ==================== */
+  function formatItemsWithSeparators(items) {
+    if (!items || items.length === 0) return '';
+    return items.map(item => {
+      const trimmedItem = item.trim();
+      if (!trimmedItem) return '';
+      return `▪ ${trimmedItem}`;
+    }).filter(item => item).join('\n');
+  }
+
+  function displayItemsInContainer(containerId, items) {
+    const container = document.getElementById(containerId + '-container');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    if (items.length === 0) {
+      container.innerHTML = '<div class="text-gray-400 text-sm italic">No items yet...</div>';
+      return;
+    }
+    
+    items.forEach((item, index) => {
+      if (item.trim()) {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'bg-white border border-gray-200 rounded-md px-3 py-2 text-sm text-gray-700 shadow-sm hover:shadow-md transition-shadow flex justify-between items-center group';
+        
+        const textSpan = document.createElement('span');
+        textSpan.className = 'flex-1';
+        
+        // Add automatic numbering for resume guidelines items
+        if (containerId === 'resumeGuidelines') {
+          const itemText = item.trim();
+          // Check if item already has a number at the start
+          const hasNumber = /^\d+\./.test(itemText);
+          textSpan.textContent = hasNumber ? itemText : `${index + 1}. ${itemText}`;
+        } else {
+          textSpan.textContent = item.trim();
+        }
+        
+        // Create remove button
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'ml-2 text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold';
+        removeBtn.innerHTML = '✕';
+        removeBtn.title = 'Remove item';
+        removeBtn.onclick = () => removeItemFromBank(containerId, index);
+        
+        itemDiv.appendChild(textSpan);
+        itemDiv.appendChild(removeBtn);
+        container.appendChild(itemDiv);
+      }
+    });
+  }
+
+  function removeItemFromBank(containerId, itemIndex) {
+    const container = document.getElementById(containerId + '-container');
+    if (!container) return;
+    
+    // Get current items
+    const currentItems = Array.from(container.children)
+      .map(child => {
+        const textSpan = child.querySelector('span');
+        return textSpan ? textSpan.textContent.trim() : '';
+      })
+      .filter(item => item && item !== 'No items yet...');
+    
+    // Remove the item at the specified index
+    currentItems.splice(itemIndex, 1);
+    
+    // Re-display the updated items
+    displayItemsInContainer(containerId, currentItems);
+  }
+
+  /* ==================== MERMAID DIAGRAM FUNCTIONS ==================== */
+  function createMermaidPreview(textarea, previewDiv) {
+    const mermaidCode = textarea.value.trim();
+    if (!mermaidCode) {
+      previewDiv.innerHTML = '<div class="text-gray-400 text-sm">Diagram preview will appear here</div>';
+      return;
+    }
+
+    try {
+      const uniqueId = 'mermaid-' + Date.now();
+      previewDiv.innerHTML = `<div id="${uniqueId}">${mermaidCode}</div>`;
+      
+      mermaid.initialize({ 
+        startOnLoad: false,
+        theme: 'default',
+        themeVariables: {
+          primaryColor: '#3b82f6',
+          primaryTextColor: '#1f2937',
+          primaryBorderColor: '#e5e7eb',
+          lineColor: '#6b7280',
+          secondaryColor: '#f3f4f6',
+          tertiaryColor: '#ffffff'
+        }
+      });
+      
+      mermaid.render(uniqueId + '-svg', mermaidCode).then(({svg}) => {
+        previewDiv.innerHTML = svg;
+      }).catch(error => {
+        console.error('Mermaid rendering error:', error);
+        previewDiv.innerHTML = '<div class="text-red-500 text-sm">Invalid diagram syntax</div>';
+      });
+    } catch (error) {
+      console.error('Mermaid error:', error);
+      previewDiv.innerHTML = '<div class="text-red-500 text-sm">Error rendering diagram</div>';
+    }
+  }
+
+  /* ==================== MODAL FUNCTIONS ==================== */
+  let currentBankType = '';
+
+  function showModal() {
+    document.getElementById('addItemModal').style.display = 'flex';
+    document.getElementById('modalInput').focus();
+  }
+
+  function hideModal() {
+    document.getElementById('addItemModal').style.display = 'none';
+    document.getElementById('modalInput').value = '';
+  }
+
+  function showPremiumModal() {
+    document.getElementById('premiumModal').style.display = 'flex';
+  }
+
+  function hidePremiumModal() {
+    document.getElementById('premiumModal').style.display = 'none';
+  }
+
+  function showCompletionState() {
+    document.getElementById('progressPhase').textContent = "Complete!";
+    document.getElementById('closeModalBtn').style.display = "block";
+    document.getElementById('closeModalBtn').textContent = "Close";
+    document.getElementById('closeModalBtn').className = "mt-4 bg-green-600 text-white px-4 py-2 rounded w-full";
+  }
+
+  /* ==================== PROGRESS LOGGING ==================== */
+  const progressLog = document.getElementById('progressLog');
+  const progressPhase = document.getElementById('progressPhase');
+
+  function logProgress(msg) { 
+    progressLog.textContent += msg + "\n"; 
+    progressLog.scrollTop = progressLog.scrollHeight; 
+  }
+
+  function setPhase(step) { 
+    progressPhase.textContent = step; 
+  }
+
+  /* ==================== TEXT ANALYSIS FUNCTIONS ==================== */
+  let analysisResults = {};
+
+  function analyzeText(type) {
+    const text = document.getElementById('analyzerText').value.trim();
+    if (!text) {
+      alert('Please paste a job description to analyze.');
+      return;
+    }
+
+    analysisResults = {};
+
+    if (type === 'actionVerbs' || type === 'all') {
+      // Extract action verbs from job descriptions
+      const actionVerbPatterns = [
+        /\b(manage|lead|develop|create|implement|design|build|maintain|optimize|analyze|coordinate|execute|deliver|achieve|improve|increase|reduce|streamline|establish|oversee|supervise|direct|facilitate|collaborate|communicate|present|negotiate|resolve|troubleshoot|support|train|mentor|guide|advise|consult|research|investigate|evaluate|assess|monitor|track|measure|report|document|organize|plan|schedule|prioritize|delegate|motivate|inspire|innovate|transform|modernize|automate|integrate|deploy|launch|scale|expand|grow|enhance|upgrade|refactor|debug|test|validate|verify|review|audit|ensure|guarantee|secure|protect|safeguard|comply|adhere|follow|enforce|regulate|govern|control|quality|assurance|risk|mitigation|strategic|tactical|operational|technical|functional|cross-functional|multi-disciplinary|agile|lean|continuous|improvement|best|practices|standards|procedures|processes|workflows|systems|solutions|products|services|platforms|applications|tools|technologies|frameworks|methodologies|approaches|strategies|initiatives|projects|programs|campaigns|events|activities|tasks|responsibilities|duties|functions|roles|positions|titles|departments|teams|groups|organizations|companies|clients|customers|stakeholders|partners|vendors|suppliers|contractors|consultants|experts|specialists|professionals|executives|managers|directors|supervisors|coordinators|analysts|engineers|developers|designers|architects|administrators|operators|technicians|representatives|associates|assistants|interns|trainees|students|graduates|candidates|applicants|employees|staff|personnel|workforce|talent|resources|assets|capital|budget|revenue|profit|loss|cost|expense|investment|return|roi|kpi|metrics|targets|goals|objectives|outcomes|results|achievements|accomplishments|successes|wins|milestones|deliverables|outputs|products|services|solutions|value|benefits|impact|influence|contribution|difference|change|transformation|innovation|creativity|problem-solving|critical-thinking|decision-making|leadership|management|communication|collaboration|teamwork|interpersonal|organizational|time-management|project-management|change-management|risk-management|quality-management|performance-management|talent-management|relationship-management|customer-service|client-relations|business-development|sales|marketing|advertising|promotion|branding|positioning|messaging|content|digital|social|media|online|web|mobile|cloud|data|analytics|intelligence|insights|reporting|visualization|dashboard|automation|integration|api|database|software|hardware|infrastructure|network|security|compliance|governance|audit|testing|deployment|maintenance|support|training|documentation|user-experience|user-interface|design-thinking|agile|scrum|kanban|devops|ci-cd|machine-learning|artificial-intelligence|blockchain|iot|ar-vr|fintech|healthtech|edtech|saas|paas|iaas|b2b|b2c|b2g|startup|enterprise|fortune|global|international|domestic|local|regional|national|public|private|non-profit|government|academic|research|consulting|advisory|freelance|contract|full-time|part-time|remote|hybrid|on-site|flexible|scalable|sustainable|innovative|disruptive|cutting-edge|state-of-the-art|industry-leading|award-winning|recognized|certified|accredited|licensed|qualified|experienced|skilled|talented|expert|proficient|competent|capable|reliable|dependable|trustworthy|ethical|professional|dedicated|committed|passionate|motivated|driven|results-oriented|goal-oriented|customer-focused|client-centric|user-centric|data-driven|evidence-based|metrics-driven|performance-driven|quality-focused|detail-oriented|process-oriented|solution-oriented|team-oriented|collaborative|cooperative|supportive|inclusive|diverse|multicultural|global-minded|forward-thinking|strategic-minded|analytical|creative|innovative|entrepreneurial|visionary|transformational|inspirational|influential|persuasive|articulate|eloquent|diplomatic|tactful|empathetic|compassionate|patient|resilient|adaptable|flexible|agile|responsive|proactive|initiative-taking|self-motivated|self-directed|independent|autonomous|accountable|responsible|ownership|stewardship|guardianship|advocacy|championship|sponsorship|mentorship|coaching|teaching|training|development|growth|learning|education|knowledge|expertise|skills|competencies|capabilities|strengths|talents|gifts|abilities|potential|capacity|bandwidth|availability|accessibility|approachability|openness|transparency|honesty|integrity|authenticity|credibility|reputation|brand|image|presence|visibility|recognition|awareness|understanding|comprehension|insight|wisdom|intelligence|acumen|savvy|know-how|experience|background|history|track-record|portfolio|credentials|qualifications|certifications|licenses|degrees|education|training|development|growth|advancement|progression|career|path|trajectory|journey|evolution|transformation|transition|change|shift|pivot|adaptation|adjustment|modification|improvement|enhancement|optimization|refinement|fine-tuning|calibration|alignment|synchronization|coordination|integration|collaboration|partnership|alliance|relationship|connection|network|community|ecosystem|environment|culture|climate|atmosphere|context|setting|situation|scenario|circumstance|condition|state|status|position|location|place|space|area|region|territory|market|industry|sector|field|domain|discipline|specialty|niche|focus|concentration|emphasis|priority|importance|significance|relevance|value|worth|merit|quality|standard|benchmark|criteria|requirement|specification|expectation|demand|need|want|desire|preference|choice|option|alternative|solution|answer|response|reaction|feedback|input|output|outcome|result|consequence|effect|impact|influence|change|difference|improvement|benefit|advantage|gain|profit|return|reward|recognition|appreciation|acknowledgment|praise|commendation|recommendation|endorsement|testimonial|reference|referral|introduction|connection|networking|relationship-building|rapport|trust|confidence|credibility|reliability|dependability|consistency|stability|predictability|certainty|assurance|guarantee|promise|commitment|dedication|loyalty|faithfulness|devotion|passion|enthusiasm|energy|vigor|vitality|dynamism|momentum|drive|ambition|aspiration|goal|objective|target|aim|purpose|mission|vision|dream|hope|expectation|anticipation|excitement|eagerness|readiness|preparedness|willingness|openness|receptiveness|responsiveness|adaptability|flexibility|agility|nimbleness|quickness|speed|efficiency|effectiveness|productivity|performance|output|throughput|capacity|capability|competency|proficiency|expertise|mastery|excellence|superiority|distinction|uniqueness|differentiation|competitive-advantage|value-proposition|unique-selling-point|brand-promise|customer-value|client-benefit|stakeholder-value|shareholder-return|investor-confidence|market-share|revenue-growth|profit-margin|cost-reduction|efficiency-gain|productivity-improvement|quality-enhancement|customer-satisfaction|client-retention|employee-engagement|talent-retention|skill-development|knowledge-transfer|best-practice|lesson-learned|success-story|case-study|proof-of-concept|pilot-program|prototype|mvp|beta-test|user-acceptance|market-validation|product-market-fit|go-to-market|launch-strategy|rollout-plan|implementation-roadmap|project-timeline|milestone-schedule|deliverable-tracker|progress-report|status-update|dashboard-metric|kpi-scorecard|performance-indicator|success-measure|outcome-assessment|impact-evaluation|roi-calculation|cost-benefit-analysis|risk-assessment|swot-analysis|gap-analysis|needs-assessment|requirements-gathering|stakeholder-mapping|user-research|market-research|competitive-analysis|industry-benchmark|trend-analysis|forecast-model|scenario-planning|strategic-planning|tactical-execution|operational-excellence|continuous-improvement|change-management|transformation-initiative|innovation-program|digital-transformation|technology-adoption|process-optimization|workflow-automation|system-integration|data-migration|cloud-migration|infrastructure-modernization|security-enhancement|compliance-upgrade|regulatory-adherence|governance-framework|risk-mitigation|crisis-management|business-continuity|disaster-recovery|incident-response|problem-resolution|root-cause-analysis|corrective-action|preventive-measure|quality-assurance|testing-protocol|validation-procedure|verification-process|audit-trail|documentation-standard|knowledge-base|training-material|user-manual|technical-specification|functional-requirement|non-functional-requirement|acceptance-criteria|definition-of-done|success-criteria|exit-criteria|go-live-checklist|post-implementation-review|lessons-learned|retrospective|feedback-session|improvement-opportunity|action-item|follow-up|next-step|recommendation|suggestion|proposal|idea|concept|approach|method|technique|strategy|tactic|plan|roadmap|blueprint|framework|model|template|pattern|standard|guideline|procedure|process|workflow|system|solution|tool|technology|platform|application|software|hardware|infrastructure|architecture|design|structure|component|module|feature|function|capability|service|product|offering|deliverable|outcome|result|benefit|value|impact|difference|change|improvement|enhancement|optimization|upgrade|modernization|transformation|innovation|disruption|revolution|evolution|advancement|progress|development|growth|expansion|scaling|extension|diversification|specialization|focus|concentration|emphasis|priority|importance|significance|relevance|applicability|suitability|appropriateness|fit|match|alignment|compatibility|consistency|coherence|integration|synergy|collaboration|partnership|alliance|relationship|connection|network|community|ecosystem|environment|culture|climate|atmosphere|context|setting|situation|scenario|circumstance|condition|state|status|position|location|place|space|area|region|territory|market|industry|sector|field|domain|discipline|specialty|niche)\b/gi
+      ];
+      
+      const actionVerbs = [];
+      actionVerbPatterns.forEach(pattern => {
+        const matches = text.match(pattern);
+        if (matches) {
+          matches.forEach(match => {
+            const cleaned = match.toLowerCase().trim();
+            if (!actionVerbs.includes(cleaned) && cleaned.length > 2) {
+              actionVerbs.push(cleaned);
+            }
+          });
+        }
+      });
+      
+      if (actionVerbs.length > 0) {
+        analysisResults.actionVerbs = actionVerbs.slice(0, 20); // Limit to top 20
+      }
+    }
+
+    if (type === 'skillsKeywords' || type === 'all') {
+      // Extract technical skills and keywords
+      const skillPatterns = [
+        /\b(JavaScript|Python|Java|C\+\+|C#|PHP|Ruby|Go|Rust|Swift|Kotlin|TypeScript|HTML|CSS|SQL|NoSQL|MongoDB|PostgreSQL|MySQL|Redis|React|Angular|Vue|Node\.js|Express|Django|Flask|Spring|Laravel|Rails|AWS|Azure|GCP|Docker|Kubernetes|Jenkins|Git|GitHub|GitLab|Jira|Confluence|Slack|Teams|Zoom|Office|Excel|PowerPoint|Word|Outlook|Salesforce|HubSpot|Marketo|Pardot|Google Analytics|Adobe|Photoshop|Illustrator|InDesign|Figma|Sketch|Canva|WordPress|Shopify|Magento|WooCommerce|Drupal|Joomla|Bootstrap|Tailwind|Material-UI|Ant Design|Semantic UI|Foundation|Bulma|Chakra UI|Styled Components|Emotion|SASS|LESS|Webpack|Parcel|Rollup|Vite|Babel|ESLint|Prettier|Jest|Cypress|Selenium|Puppeteer|Playwright|Storybook|Chromatic|Netlify|Vercel|Heroku|DigitalOcean|Linode|Vultr|Cloudflare|Fastly|CDN|API|REST|GraphQL|SOAP|gRPC|WebSocket|OAuth|JWT|SAML|LDAP|Active Directory|SSO|MFA|2FA|SSL|TLS|HTTPS|VPN|Firewall|IDS|IPS|SIEM|SOC|GDPR|HIPAA|SOX|PCI DSS|ISO 27001|NIST|OWASP|DevOps|CI\/CD|Infrastructure as Code|Terraform|Ansible|Puppet|Chef|Vagrant|Packer|Consul|Vault|Nomad|Prometheus|Grafana|ELK Stack|Splunk|New Relic|Datadog|PagerDuty|Slack|Discord|Zoom|Teams|Skype|WebEx|GoToMeeting|Calendly|Doodle|Trello|Asana|Monday|Notion|Airtable|Basecamp|Wrike|Smartsheet|Microsoft Project|Gantt|Kanban|Scrum|Agile|Waterfall|Lean|Six Sigma|ITIL|COBIT|TOGAF|Zachman|SABSA|COSO|CISA|CISSP|CISM|CRISC|CEH|OSCP|GCIH|GSEC|Security\+|Network\+|A\+|Linux\+|Cloud\+|PMP|PRINCE2|CSM|PSM|SAFe|PMI|ITIL|COBIT|TOGAF|Zachman|SABSA|COSO|CISA|CISSP|CISM|CRISC|CEH|OSCP|GCIH|GSEC|Security\+|Network\+|A\+|Linux\+|Cloud\+|PMP|PRINCE2|CSM|PSM|SAFe|PMI)\b/gi,
+        /\b(machine learning|artificial intelligence|deep learning|neural networks|natural language processing|computer vision|data science|big data|analytics|business intelligence|data visualization|statistical analysis|predictive modeling|regression|classification|clustering|recommendation systems|time series|forecasting|A\/B testing|hypothesis testing|statistical significance|p-value|confidence interval|correlation|causation|feature engineering|data preprocessing|data cleaning|data wrangling|ETL|ELT|data pipeline|data warehouse|data lake|data mart|OLAP|OLTP|dimensional modeling|star schema|snowflake schema|fact table|dimension table|slowly changing dimension|data governance|data quality|master data management|metadata management|data lineage|data catalog|data dictionary|data profiling|data discovery|data integration|data migration|data synchronization|real-time processing|batch processing|stream processing|event-driven architecture|microservices|serverless|containerization|orchestration|service mesh|API gateway|load balancer|reverse proxy|content delivery network|edge computing|fog computing|IoT|blockchain|cryptocurrency|smart contracts|DeFi|NFT|Web3|metaverse|augmented reality|virtual reality|mixed reality|3D modeling|game development|mobile development|iOS|Android|React Native|Flutter|Xamarin|Ionic|PhoneGap|Cordova|Progressive Web App|Single Page Application|Multi-Page Application|Server-Side Rendering|Static Site Generation|Jamstack|Headless CMS|Content Management System|E-commerce|Payment Gateway|Shopping Cart|Inventory Management|Order Management|Customer Relationship Management|Enterprise Resource Planning|Supply Chain Management|Human Resources Information System|Learning Management System|Customer Support|Help Desk|Ticketing System|Knowledge Base|FAQ|Chatbot|Virtual Assistant|Voice Assistant|Natural Language Understanding|Speech Recognition|Text-to-Speech|Optical Character Recognition|Image Recognition|Facial Recognition|Biometric Authentication|Multi-Factor Authentication|Single Sign-On|Identity and Access Management|Privileged Access Management|Zero Trust|Network Security|Endpoint Security|Cloud Security|Application Security|Data Security|Privacy|Compliance|Audit|Risk Management|Incident Response|Disaster Recovery|Business Continuity|Change Management|Configuration Management|Asset Management|Vulnerability Management|Patch Management|Backup and Recovery|Monitoring and Alerting|Log Management|Performance Tuning|Capacity Planning|Scalability|High Availability|Fault Tolerance|Redundancy|Failover|Load Testing|Stress Testing|Performance Testing|Security Testing|Penetration Testing|Code Review|Static Analysis|Dynamic Analysis|Threat Modeling|Risk Assessment|Security Architecture|Network Architecture|System Architecture|Software Architecture|Database Architecture|Cloud Architecture|Enterprise Architecture|Solution Architecture|Technical Architecture|Information Architecture|Data Architecture|Security by Design|Privacy by Design|Secure Development Lifecycle|DevSecOps|Shift Left|Continuous Security|Security Automation|Compliance Automation|Infrastructure Automation|Test Automation|Deployment Automation|Release Automation|Configuration Automation|Monitoring Automation|Incident Automation|Response Automation|Recovery Automation|Backup Automation|Patch Automation|Update Automation|Upgrade Automation|Migration Automation|Integration Automation|Synchronization Automation|Replication Automation|Scaling Automation|Provisioning Automation|Deprovisioning Automation|Lifecycle Management|Version Control|Source Control|Code Repository|Branching Strategy|Merge Strategy|Code Quality|Code Coverage|Technical Debt|Refactoring|Code Optimization|Performance Optimization|Database Optimization|Query Optimization|Index Optimization|Caching|Content Caching|Database Caching|Application Caching|Browser Caching|CDN Caching|Memory Management|Garbage Collection|Resource Management|Connection Pooling|Thread Pooling|Process Management|Task Scheduling|Job Scheduling|Workflow Management|Business Process Management|Robotic Process Automation|Intelligent Process Automation|Hyperautomation|Digital Transformation|Digital Innovation|Digital Strategy|Digital Marketing|Digital Advertising|Digital Analytics|Digital Experience|Digital Customer Journey|Digital Touchpoint|Digital Channel|Omnichannel|Multichannel|Cross-channel|Customer Experience|User Experience|User Interface|User Research|User Testing|Usability Testing|Accessibility Testing|A\/B Testing|Multivariate Testing|Conversion Rate Optimization|Search Engine Optimization|Search Engine Marketing|Pay-Per-Click|Social Media Marketing|Content Marketing|Email Marketing|Influencer Marketing|Affiliate Marketing|Partnership Marketing|Event Marketing|Experiential Marketing|Brand Marketing|Product Marketing|Growth Marketing|Performance Marketing|Data-Driven Marketing|Marketing Automation|Lead Generation|Lead Nurturing|Lead Scoring|Customer Acquisition|Customer Retention|Customer Lifetime Value|Customer Segmentation|Personalization|Recommendation Engine|Predictive Analytics|Prescriptive Analytics|Descriptive Analytics|Diagnostic Analytics|Real-Time Analytics|Historical Analytics|Comparative Analytics|Trend Analysis|Cohort Analysis|Funnel Analysis|Attribution Analysis|Multi-Touch Attribution|Cross-Device Tracking|Customer Data Platform|Data Management Platform|Customer Relationship Management|Marketing Resource Management|Campaign Management|Content Management|Asset Management|Brand Management|Product Management|Project Management|Program Management|Portfolio Management|Resource Management|Time Management|Budget Management|Cost Management|Financial Management|Revenue Management|Profit Management|Risk Management|Quality Management|Performance Management|Talent Management|Knowledge Management|Change Management|Stakeholder Management|Vendor Management|Supplier Management|Partner Management|Client Management|Account Management|Relationship Management|Community Management|Social Media Management|Reputation Management|Crisis Management|Issue Management|Problem Management|Incident Management|Service Management|Operations Management|Process Management|Workflow Management|Task Management|Activity Management|Event Management|Meeting Management|Communication Management|Collaboration Management|Team Management|Leadership Development|Succession Planning|Career Development|Learning and Development|Training and Development|Skill Development|Competency Development|Capability Development|Capacity Building|Organizational Development|Culture Development|Engagement Development|Motivation Development|Performance Development|Productivity Development|Efficiency Development|Effectiveness Development|Innovation Development|Creativity Development|Problem-Solving Development|Critical Thinking Development|Decision Making Development|Strategic Thinking Development|Analytical Thinking Development|Systems Thinking Development|Design Thinking Development|Lean Thinking Development|Agile Thinking Development|Growth Mindset Development|Fixed Mindset Transformation|Mindset Shift|Behavioral Change|Cultural Change|Organizational Change|Digital Change|Technology Change|Process Change|System Change|Structure Change|Strategy Change|Vision Change|Mission Change|Values Change|Purpose Change|Goal Change|Objective Change|Target Change|Metric Change|KPI Change|OKR Change|Scorecard Change|Dashboard Change|Report Change|Analysis Change|Insight Change|Recommendation Change|Action Change|Implementation Change|Execution Change|Delivery Change|Outcome Change|Result Change|Impact Change|Value Change|Benefit Change|Return Change|Investment Change|Cost Change|Budget Change|Resource Change|Allocation Change|Optimization Change|Improvement Change|Enhancement Change|Upgrade Change|Modernization Change|Transformation Change|Innovation Change|Disruption Change|Revolution Change|Evolution Change|Advancement Change|Progress Change|Development Change|Growth Change|Expansion Change|Scaling Change|Extension Change|Diversification Change|Specialization Change|Focus Change|Concentration Change|Emphasis Change|Priority Change|Importance Change|Significance Change|Relevance Change|Applicability Change|Suitability Change|Appropriateness Change|Fit Change|Match Change|Alignment Change|Compatibility Change|Consistency Change|Coherence Change|Integration Change|Synergy Change|Collaboration Change|Partnership Change|Alliance Change|Relationship Change|Connection Change|Network Change|Community Change|Ecosystem Change|Environment Change|Culture Change|Climate Change|Atmosphere Change|Context Change|Setting Change|Situation Change|Scenario Change|Circumstance Change|Condition Change|State Change|Status Change|Position Change|Location Change|Place Change|Space Change|Area Change|Region Change|Territory Change|Market Change|Industry Change|Sector Change|Field Change|Domain Change|Discipline Change|Specialty Change|Niche Change)\b/gi
+      ];
+      
+      const skills = [];
+      skillPatterns.forEach(pattern => {
+        const matches = text.match(pattern);
+        if (matches) {
+          matches.forEach(match => {
+            const cleaned = match.trim();
+            if (!skills.includes(cleaned) && cleaned.length > 1) {
+              skills.push(cleaned);
+            }
+          });
+        }
+      });
+      
+      if (skills.length > 0) {
+        analysisResults.skillsKeywords = skills.slice(0, 25); // Limit to top 25
+      }
+    }
+
+    if (type === 'achievementPhrases' || type === 'all') {
+      // Extract achievement-oriented phrases
+      const achievementPatterns = [
+        /\b(increased|improved|enhanced|optimized|streamlined|reduced|decreased|minimized|maximized|achieved|exceeded|delivered|completed|launched|implemented|developed|created|built|established|generated|produced|saved|earned|won|gained|grew|expanded|scaled|transformed|modernized|automated|integrated|consolidated|centralized|standardized|systematized|organized|restructured|redesigned|reengineered|revitalized|revamped|upgraded|updated|migrated|transitioned|converted|adapted|customized|tailored|personalized|specialized|focused|concentrated|prioritized|accelerated|expedited|fast-tracked|pioneered|innovated|invented|discovered|identified|recognized|awarded|certified|accredited|qualified|trained|educated|mentored|coached|guided|advised|consulted|supported|assisted|helped|facilitated|enabled|empowered|motivated|inspired|influenced|persuaded|convinced|negotiated|mediated|resolved|solved|fixed|corrected|addressed|handled|managed|controlled|monitored|tracked|measured|analyzed|evaluated|assessed|reviewed|audited|tested|validated|verified|confirmed|ensured|guaranteed|secured|protected|safeguarded|maintained|sustained|preserved|retained|kept|held|owned|possessed|acquired|obtained|procured|purchased|bought|sold|marketed|promoted|advertised|publicized|communicated|presented|demonstrated|showcased|exhibited|displayed|featured|highlighted|emphasized|stressed|underscored|reinforced|strengthened|fortified|solidified|consolidated|unified|integrated|synchronized|coordinated|aligned|balanced|harmonized|optimized|fine-tuned|calibrated|adjusted|modified|refined|polished|perfected|mastered|excelled|succeeded|triumphed|prevailed|overcame|conquered|defeated|outperformed|surpassed|exceeded|transcended|elevated|raised|lifted|boosted|amplified|magnified|multiplied|doubled|tripled|quadrupled|quintupled|increased by|improved by|enhanced by|optimized by|streamlined by|reduced by|decreased by|minimized by|maximized by|achieved by|exceeded by|delivered by|completed by|launched by|implemented by|developed by|created by|built by|established by|generated by|produced by|saved by|earned by|won by|gained by|grew by|expanded by|scaled by|transformed by|modernized by|automated by|integrated by|consolidated by|centralized by|standardized by|systematized by|organized by|restructured by|redesigned by|reengineered by|revitalized by|revamped by|upgraded by|updated by|migrated by|transitioned by|converted by|adapted by|customized by|tailored by|personalized by|specialized by|focused by|concentrated by|prioritized by|accelerated by|expedited by|fast-tracked by|pioneered by|innovated by|invented by|discovered by|identified by|recognized by|awarded by|certified by|accredited by|qualified by|trained by|educated by|mentored by|coached by|guided by|advised by|consulted by|supported by|assisted by|helped by|facilitated by|enabled by|empowered by|motivated by|inspired by|influenced by|persuaded by|convinced by|negotiated by|mediated by|resolved by|solved by|fixed by|corrected by|addressed by|handled by|managed by|controlled by|monitored by|tracked by|measured by|analyzed by|evaluated by|assessed by|reviewed by|audited by|tested by|validated by|verified by|confirmed by|ensured by|guaranteed by|secured by|protected by|safeguarded by|maintained by|sustained by|preserved by|retained by|kept by|held by|owned by|possessed by|acquired by|obtained by|procured by|purchased by|bought by|sold by|marketed by|promoted by|advertised by|publicized by|communicated by|presented by|demonstrated by|showcased by|exhibited by|displayed by|featured by|highlighted by|emphasized by|stressed by|underscored by|reinforced by|strengthened by|fortified by|solidified by|consolidated by|unified by|integrated by|synchronized by|coordinated by|aligned by|balanced by|harmonized by|optimized by|fine-tuned by|calibrated by|adjusted by|modified by|refined by|polished by|perfected by|mastered by|excelled by|succeeded by|triumphed by|prevailed by|overcame by|conquered by|defeated by|outperformed by|surpassed by|exceeded by|transcended by|elevated by|raised by|lifted by|boosted by|amplified by|magnified by|multiplied by|doubled by|tripled by|quadrupled by|quintupled by)\b[^.]*?(\d+%|\d+x|\$\d+|\d+\+|significant|substantial|notable|remarkable|outstanding|exceptional|extraordinary|impressive|dramatic|major|minor|slight|moderate|considerable|tremendous|enormous|massive|huge|large|small|tiny|minimal|maximal|optimal|ideal|perfect|excellent|superior|premium|high-quality|top-tier|world-class|industry-leading|market-leading|award-winning|best-in-class|state-of-the-art|cutting-edge|innovative|revolutionary|groundbreaking|pioneering|trailblazing|game-changing|disruptive|transformative|impactful|influential|meaningful|valuable|beneficial|advantageous|profitable|cost-effective|efficient|effective|productive|successful|winning|victorious|triumphant|accomplished|achieved|completed|finished|done|delivered|executed|implemented|realized|actualized|materialized|manifested|demonstrated|proven|validated|verified|confirmed|established|secured|guaranteed|ensured|maintained|sustained|preserved|retained|kept|held|owned|possessed|acquired|obtained|procured|purchased|bought|sold|marketed|promoted|advertised|publicized|communicated|presented|demonstrated|showcased|exhibited|displayed|featured|highlighted|emphasized|stressed|underscored|reinforced|strengthened|fortified|solidified|consolidated|unified|integrated|synchronized|coordinated|aligned|balanced|harmonized|optimized|fine-tuned|calibrated|adjusted|modified|refined|polished|perfected|mastered|excelled|succeeded|triumphed|prevailed|overcame|conquered|defeated|outperformed|surpassed|exceeded|transcended|elevated|raised|lifted|boosted|amplified|magnified|multiplied|doubled|tripled|quadrupled|quintupled)/gi
+      ];
+      
+      const achievements = [];
+      achievementPatterns.forEach(pattern => {
+        const matches = text.match(pattern);
+        if (matches) {
+          matches.forEach(match => {
+            const cleaned = match.trim();
+            if (!achievements.includes(cleaned) && cleaned.length > 10 && cleaned.length < 150) {
+              achievements.push(cleaned);
+            }
+          });
+        }
+      });
+      
+      if (achievements.length > 0) {
+        analysisResults.achievementPhrases = achievements.slice(0, 15); // Limit to top 15
+      }
+    }
+
+    if (type === 'industryTerms' || type === 'all') {
+      // Extract industry-specific terms and buzzwords
+      const industryTermPatterns = [
+        /\b(agile|scrum|kanban|lean|six sigma|kaizen|continuous improvement|best practices|industry standards|regulatory compliance|quality assurance|risk management|change management|project management|program management|portfolio management|stakeholder management|vendor management|client relations|customer service|business development|market research|competitive analysis|strategic planning|tactical execution|operational excellence|performance optimization|process improvement|workflow automation|digital transformation|technology adoption|innovation management|product development|service delivery|solution architecture|system integration|data analytics|business intelligence|machine learning|artificial intelligence|cloud computing|cybersecurity|information security|data privacy|regulatory compliance|audit compliance|financial reporting|budget management|cost control|revenue optimization|profit maximization|market penetration|customer acquisition|customer retention|brand awareness|thought leadership|subject matter expertise|domain knowledge|technical proficiency|cross-functional collaboration|interdisciplinary teamwork|global perspective|cultural competency|diversity and inclusion|sustainability initiatives|corporate social responsibility|environmental stewardship|ethical business practices|governance framework|risk mitigation|crisis management|business continuity|disaster recovery|incident response|problem resolution|root cause analysis|corrective action|preventive measures|quality control|testing protocols|validation procedures|verification processes|documentation standards|knowledge management|training programs|professional development|skill enhancement|competency building|capability maturation|organizational learning|institutional knowledge|intellectual property|trade secrets|proprietary technology|competitive advantage|market differentiation|value proposition|unique selling point|customer value|client benefit|stakeholder value|shareholder return|investor confidence|market capitalization|enterprise value|return on investment|cost-benefit analysis|total cost of ownership|net present value|internal rate of return|payback period|break-even analysis|sensitivity analysis|scenario planning|monte carlo simulation|decision tree analysis|swot analysis|pest analysis|porter five forces|balanced scorecard|key performance indicators|objectives and key results|management by objectives|performance management|talent management|succession planning|leadership development|executive coaching|mentoring programs|knowledge transfer|best practice sharing|lessons learned|post-mortem analysis|retrospective meetings|continuous feedback|360-degree feedback|peer review|code review|design review|architecture review|security review|compliance review|audit review|quality review|performance review|annual review|quarterly review|monthly review|weekly review|daily standup|sprint planning|sprint review|sprint retrospective|backlog grooming|user story mapping|acceptance criteria|definition of done|velocity tracking|burn-down charts|burn-up charts|cumulative flow diagrams|lead time|cycle time|throughput|work in progress|queue length|bottleneck analysis|constraint theory|theory of constraints|lean manufacturing|just-in-time|pull system|push system|demand planning|supply chain management|inventory management|warehouse management|logistics management|transportation management|distribution management|procurement management|supplier relationship management|vendor relationship management|partner relationship management|alliance management|joint venture|strategic partnership|merger and acquisition|due diligence|integration planning|synergy realization|change management|transformation management|organizational development|culture change|employee engagement|talent retention|skill development|career progression|performance improvement|productivity enhancement|efficiency optimization|cost reduction|waste elimination|value stream mapping|process mapping|workflow analysis|time and motion study|ergonomic assessment|safety assessment|environmental assessment|impact assessment|risk assessment|threat assessment|vulnerability assessment|security assessment|compliance assessment|audit assessment|quality assessment|performance assessment|maturity assessment|readiness assessment|gap analysis|needs analysis|requirements analysis|stakeholder analysis|business analysis|system analysis|data analysis|statistical analysis|trend analysis|pattern recognition|anomaly detection|outlier identification|correlation analysis|regression analysis|predictive modeling|forecasting|simulation|optimization|heuristic|algorithm|machine learning|deep learning|neural networks|natural language processing|computer vision|robotics|automation|artificial intelligence|augmented reality|virtual reality|mixed reality|internet of things|blockchain|cryptocurrency|fintech|healthtech|edtech|proptech|cleantech|greentech|biotech|nanotech|quantum computing|edge computing|fog computing|cloud native|serverless|microservices|containerization|orchestration|devops|devsecops|gitops|infrastructure as code|configuration management|continuous integration|continuous deployment|continuous delivery|continuous monitoring|observability|telemetry|logging|metrics|tracing|alerting|incident management|problem management|change management|release management|deployment management|environment management|capacity management|performance management|availability management|reliability management|scalability management|security management|compliance management|governance management|risk management|vendor management|asset management|license management|patch management|vulnerability management|threat management|identity management|access management|privilege management|authentication|authorization|encryption|decryption|digital signature|certificate management|key management|secret management|password management|multi-factor authentication|single sign-on|zero trust|network security|endpoint security|application security|data security|cloud security|mobile security|iot security|operational technology security|industrial control system security|scada security|critical infrastructure protection|national security|homeland security|cybersecurity|information security|data protection|privacy protection|gdpr|ccpa|hipaa|sox|pci dss|iso 27001|nist|cobit|itil|togaf|zachman|sabsa|coso|cisa|cissp|cism|crisc|ceh|oscp|gcih|gsec|security+|network+|a+|linux+|cloud+|pmp|prince2|csm|psm|safe|pmi|agile|scrum|kanban|lean|six sigma|itil|cobit|togaf|zachman|sabsa|coso)\b/gi
+      ];
+      
+      const industryTerms = [];
+      industryTermPatterns.forEach(pattern => {
+        const matches = text.match(pattern);
+        if (matches) {
+          matches.forEach(match => {
+            const cleaned = match.toLowerCase().trim();
+            if (!industryTerms.includes(cleaned) && cleaned.length > 2) {
+              industryTerms.push(cleaned);
+            }
+          });
+        }
+      });
+      
+      if (industryTerms.length > 0) {
+        analysisResults.industryTerms = industryTerms.slice(0, 20); // Limit to top 20
+      }
+    }
+
+    // Show results in modal
+    showAnalysisModal();
+  }
+
+  function showAnalysisModal() {
+    const modal = document.getElementById('analysisModal');
+    const resultsContainer = document.getElementById('analysisResults');
+    
+    resultsContainer.innerHTML = '';
+    
+    const categoryNames = {
+      'actionVerbs': 'Action Verbs',
+      'skillsKeywords': 'Skills & Keywords',
+      'achievementPhrases': 'Achievement Phrases',
+      'industryTerms': 'Industry Terms'
+    };
+    
+    const categoryColors = {
+      'actionVerbs': 'blue',
+      'skillsKeywords': 'green',
+      'achievementPhrases': 'purple',
+      'industryTerms': 'orange'
+    };
+    
+    Object.keys(analysisResults).forEach(category => {
+      const phrases = analysisResults[category];
+      if (phrases && phrases.length > 0) {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'bg-gray-50 rounded-lg p-4';
+        
+        const categoryTitle = document.createElement('h3');
+        categoryTitle.className = `text-lg font-semibold text-${categoryColors[category]}-700 mb-3`;
+        categoryTitle.textContent = `${categoryNames[category]} (${phrases.length})`;
+        
+        categoryDiv.appendChild(categoryTitle);
+        
+        const phrasesGrid = document.createElement('div');
+        phrasesGrid.className = 'grid grid-cols-1 md:grid-cols-2 gap-2';
+        
+        phrases.forEach((phrase, index) => {
+          const phraseItem = document.createElement('label');
+          phraseItem.className = 'flex items-center space-x-2 p-2 bg-white rounded border hover:bg-gray-50 cursor-pointer';
+          
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.checked = true;
+          checkbox.className = `text-${categoryColors[category]}-600 focus:ring-${categoryColors[category]}-500`;
+          checkbox.dataset.category = category;
+          checkbox.dataset.phrase = phrase;
+          
+          const phraseText = document.createElement('span');
+          phraseText.className = 'text-sm text-gray-700 flex-1';
+          phraseText.textContent = phrase;
+          
+          phraseItem.appendChild(checkbox);
+          phraseItem.appendChild(phraseText);
+          phrasesGrid.appendChild(phraseItem);
+        });
+        
+        categoryDiv.appendChild(phrasesGrid);
+        resultsContainer.appendChild(categoryDiv);
+      }
+    });
+    
+    if (Object.keys(analysisResults).length === 0) {
+      resultsContainer.innerHTML = '<div class="text-center text-gray-500 py-8">No relevant terms found. Try analyzing a different job description.</div>';
+    }
+    
+    modal.style.display = 'flex';
+  }
+
+  function addSelectedPhrasesToBanks() {
+    const checkboxes = document.querySelectorAll('#analysisResults input[type="checkbox"]:checked');
+    const phrasesToAdd = {};
+    
+    checkboxes.forEach(checkbox => {
+      const category = checkbox.dataset.category;
+      const phrase = checkbox.dataset.phrase;
+      
+      if (!phrasesToAdd[category]) {
+        phrasesToAdd[category] = [];
+      }
+      phrasesToAdd[category].push(phrase);
+    });
+    
+    let totalAdded = 0;
+    Object.keys(phrasesToAdd).forEach(category => {
+      if (phrasesToAdd[category].length > 0) {
+        addToWordBank(category, phrasesToAdd[category].join('\n'));
+        totalAdded += phrasesToAdd[category].length;
+      }
+    });
+    
+    document.getElementById('analysisModal').style.display = 'none';
+    alert(`Added ${totalAdded} terms to word banks!`);
+  }
+
+  /* ==================== TEXT PROCESSING FUNCTIONS ==================== */
+  function countMatches(pattern) {
+    const jobDescriptionText = document.getElementById('jobDescriptionText').value;
+    if (!jobDescriptionText.trim()) return 0;
+    
+    const regex = new RegExp(pattern, 'gi');
+    const matches = jobDescriptionText.match(regex);
+    return matches ? matches.length : 0;
+  }
+
+  function processIndustryTerms(text) {
+    const industryTermsContainer = document.getElementById('industryTerms-container');
+    if (!industryTermsContainer) return text;
+    
+    const industryTerms = Array.from(industryTermsContainer.children).map(child => {
+      const textSpan = child.querySelector('span');
+      return textSpan ? textSpan.textContent.trim() : '';
+    });
+    
+    let processedText = text;
+    industryTerms.forEach(term => {
+      if (term && term !== 'No items yet...') {
+        const regex = new RegExp(`\\b${term}\\b`, 'gi');
+        processedText = processedText.replace(regex, (match) => {
+          return Math.random() > 0.7 ? match : `${match} and related ${term}`;
+        });
+      }
+    });
+    
+    return processedText;
+  }
+
+  /* ==================== WORD BANK MANAGEMENT ==================== */
+  function addToWordBank(type, text) {
+    const container = document.getElementById(type + '-container');
+    if (!container) return;
+
+    const items = text.split('\n').filter(item => item.trim());
+    const existingItems = Array.from(container.children)
+      .map(child => {
+        const textSpan = child.querySelector('span');
+        return textSpan ? textSpan.textContent.trim() : '';
+      })
+      .filter(item => item && item !== 'No items yet...');
+
+    const newItems = items.filter(item => !existingItems.includes(item.trim()));
+    
+    if (newItems.length > 0) {
+      const allItems = [...existingItems, ...newItems];
+      displayItemsInContainer(type, allItems);
+    }
+  }
+
+  function addItemToBank(type) {
+    currentBankType = type;
+    const modal = document.getElementById('addItemModal');
+    const title = document.getElementById('modalTitle');
+    const input = document.getElementById('modalInput');
+    
+    const typeNames = {
+      'actionVerbs': 'Action Verb',
+      'skillsKeywords': 'Skill/Keyword',
+      'achievementPhrases': 'Achievement Phrase',
+      'industryTerms': 'Industry Term',
+      'resumeGuidelines': 'Resume Guideline'
+    };
+    
+    const placeholders = {
+      'actionVerbs': 'e.g., "managed", "developed", "implemented"',
+      'skillsKeywords': 'e.g., "JavaScript", "project management", "data analysis"',
+      'achievementPhrases': 'e.g., "increased efficiency by 25%"',
+      'industryTerms': 'e.g., "agile methodology", "cloud computing"',
+      'resumeGuidelines': 'e.g., "Use quantifiable achievements when possible"'
+    };
+    
+    title.textContent = `Add ${typeNames[type] || 'Item'}`;
+    input.placeholder = placeholders[type] || 'Enter your item...';
+    
+    showModal();
+  }
+
+  /* ==================== API COMMUNICATION ==================== */
+  async function callChat(messages, temperature = 0.3) {
+    const response = await fetch('https://gateway.ai.cloudflare.com/v1/a5ac50eac3fc3bba71323b08817bd04e/drafting-gateway/openai/chat/completions', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        'cf-aig-authorization': 'Bearer IWiI5543bX0pRivT38JoUnkIyj1gg2v_CxQlm8KS'
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: messages,
+        temperature: temperature
+      })
+    });
+    
+    const data = await response.json();
+    if (!response.ok) throw new Error(data?.error?.message || "Cloudflare Gateway error");
+    return data;
+  }
+
+  /* ==================== CONTEXT BUILDING ==================== */
+  function getContainerText(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return '';
+    
+    const items = Array.from(container.children)
+      .map(child => {
+        const textSpan = child.querySelector('span');
+        return textSpan ? textSpan.textContent.trim() : '';
+      })
+      .filter(item => item && item !== 'No items yet...');
+    
+    return items.join('\n');
+  }
+
+  function buildSharedContext() {
+    const resumeGuidelines = getContainerText('resumeGuidelines-container');
+    const actionVerbs = getContainerText('actionVerbs-container');
+    const skillsKeywords = getContainerText('skillsKeywords-container');
+    const achievementPhrases = getContainerText('achievementPhrases-container');
+    const industryTerms = getContainerText('industryTerms-container');
+
+    // Limit items per category to prevent payload size issues
+    const MAX_ITEMS_PER_CATEGORY = 15;
+    
+    function limitItems(text) {
+      if (!text) return '';
+      const items = text.split('\n').filter(item => item.trim());
+      return items.slice(0, MAX_ITEMS_PER_CATEGORY).join('\n');
+    }
+
+    let context = `RESUME WRITING CONTEXT:\n\n`;
+    
+    // Add prime resume guidelines (default if none provided)
+    const defaultGuidelines = [
+      "Use strong action verbs to start bullet points and demonstrate impact",
+      "Quantify achievements with specific numbers, percentages, and metrics whenever possible",
+      "Tailor content to match job requirements while maintaining truthfulness",
+      "Keep bullet points concise (1-2 lines) and focus on results rather than responsibilities",
+      "Use consistent formatting, tense, and professional language throughout",
+      "Prioritize most relevant and impressive accomplishments for each role"
+    ];
+    
+    if (resumeGuidelines) {
+      context += `Resume Guidelines:\n${limitItems(resumeGuidelines)}\n\n`;
+    } else {
+      context += `Resume Guidelines:\n${defaultGuidelines.map(g => `• ${g}`).join('\n')}\n\n`;
+    }
+    
+    const limitedActionVerbs = limitItems(actionVerbs);
+    if (limitedActionVerbs) {
+      context += `Preferred Action Verbs:\n${formatItemsWithSeparators(limitedActionVerbs.split('\n'))}\n\n`;
+    }
+    
+    const limitedSkillsKeywords = limitItems(skillsKeywords);
+    if (limitedSkillsKeywords) {
+      context += `Skills & Keywords:\n${formatItemsWithSeparators(limitedSkillsKeywords.split('\n'))}\n\n`;
+    }
+    
+    const limitedAchievementPhrases = limitItems(achievementPhrases);
+    if (limitedAchievementPhrases) {
+      context += `Achievement Phrases:\n${formatItemsWithSeparators(limitedAchievementPhrases.split('\n'))}\n\n`;
+    }
+    
+    const limitedIndustryTerms = limitItems(industryTerms);
+    if (limitedIndustryTerms) {
+      context += `Industry Terms:\n${formatItemsWithSeparators(limitedIndustryTerms.split('\n'))}\n\n`;
+    }
+    
+    return context;
+  }
+
+  /* ==================== TEXT REFINEMENT ==================== */
+  function splitIntoParagraphs(text) {
+    return text.split(/\n\s*\n/).map(p => p.trim()).filter(p => p.length > 0);
+  }
+
+  function joinParagraphs(paragraphs) { 
+    return paragraphs.join("\n\n"); 
+  }
+
+  function appearsToBeSection(p) {
+    return /^(SUMMARY|EXPERIENCE|EDUCATION|SKILLS|PROJECTS|CERTIFICATIONS)/i.test(p.trim()) || /^[A-Z\s]+:/.test(p.trim());
+  }
+
+  async function refineParagraphsIfEnabled(fullResume, sharedContext, passes = 2) {
+    const enableRefinement = document.getElementById('enableRefinement').checked;
+    if (!enableRefinement) return fullResume;
+
+    let refined = fullResume;
+    const paragraphs = splitIntoParagraphs(refined);
+    
+    for (let pass = 1; pass <= passes; pass++) {
+      logProgress(`Refinement pass ${pass}/${passes}...`);
+      
+      const refinedParagraphs = [];
+      for (let i = 0; i < paragraphs.length; i++) {
+        const paragraph = paragraphs[i];
+        
+        if (appearsToBeSection(paragraph)) {
+          refinedParagraphs.push(paragraph);
+          continue;
+        }
+        
+        if (paragraph.length < 50) {
+          refinedParagraphs.push(paragraph);
+          continue;
+        }
+        
+        const refineMessages = [
+          { role: "system", content: `You are a professional resume writer refining resume content. ${sharedContext}` },
+          { role: "user", content: `Refine this resume section for clarity, impact, and professional presentation. Keep the same meaning but improve readability and professional appeal:\n\n${paragraph}` }
+        ];
+        
+        try {
+          const refineResult = await callChat(refineMessages, 0.2);
+          if (refineResult.choices && refineResult.choices[0]) {
+            refinedParagraphs.push(refineResult.choices[0].message.content.trim());
+          } else {
+            refinedParagraphs.push(paragraph);
+          }
+        } catch (error) {
+          logProgress(`Refinement error on section ${i + 1}: ${error.message}`);
+          refinedParagraphs.push(paragraph);
+        }
+        
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+      
+      refined = joinParagraphs(refinedParagraphs);
+    }
+    
+    return refined;
+  }
+
+  /* ==================== EVENT LISTENERS ==================== */
+  document.addEventListener('DOMContentLoaded', function() {
+    // Load default job field
+    loadJobField('technology');
+    
+    // Job field selector
+    document.getElementById('jobFieldSelect').addEventListener('change', function() {
+      loadJobField(this.value);
+    });
+    
+    // Modal add button
+    document.getElementById('modalAddBtn').addEventListener('click', function() {
+      const input = document.getElementById('modalInput');
+      const text = input.value.trim();
+      
+      if (text && currentBankType) {
+        const container = document.getElementById(currentBankType + '-container');
+        const existingItems = Array.from(container.children)
+          .map(child => {
+            const textSpan = child.querySelector('span');
+            return textSpan ? textSpan.textContent.trim() : '';
+          })
+          .filter(item => item && item !== 'No items yet...');
+        
+        const allItems = [...existingItems, text];
+        displayItemsInContainer(currentBankType, allItems);
+        
+        hideModal();
+      }
+    });
+    
+    // Modal input enter key
+    document.getElementById('modalInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        document.getElementById('modalAddBtn').click();
+      }
+    });
+    
+    // Close modal button
+    document.getElementById('closeModalBtn').addEventListener('click', function() {
+      document.getElementById('progressModal').style.display = 'none';
+    });
+    
+    // Copy button
+    document.getElementById('copyBtn').addEventListener('click', function() {
+      const outputText = document.getElementById('outputText').textContent;
+      navigator.clipboard.writeText(outputText).then(function() {
+        // Temporarily change button text to show success
+        const btn = document.getElementById('copyBtn');
+        const originalText = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.className = 'bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.className = 'bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium';
+        }, 2000);
+      });
+    });
+
+    // Download PDF button
+    document.getElementById('downloadPdfBtn').addEventListener('click', function() {
+      const outputText = document.getElementById('outputText').textContent;
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      const splitText = doc.splitTextToSize(outputText, 180);
+      doc.text(splitText, 10, 10);
+      doc.save('tailored-resume.pdf');
+    });
+
+    // Profile picture handling functions
+    function handleProfilePictureUpload() {
+      const input = document.getElementById('profilePictureInput');
+      const preview = document.getElementById('profilePicturePreview');
+      const img = document.getElementById('profilePictureImg');
+      const fileName = document.getElementById('profilePictureFileName');
+      
+      const file = input.files[0];
+      if (file) {
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+          alert('Please select a valid image file.');
+          return;
+        }
+        
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          alert('Image file size must be less than 5MB.');
+          return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const imageData = e.target.result;
+          
+          // Store in localStorage
+          localStorage.setItem('profilePicture', imageData);
+          localStorage.setItem('profilePictureFileName', file.name);
+          
+          // Show preview
+          img.src = imageData;
+          fileName.textContent = file.name;
+          preview.style.display = 'flex';
+          
+          logProgress(`Profile picture "${file.name}" uploaded and stored.`);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+    
+    function removeProfilePicture() {
+      // Clear localStorage
+      localStorage.removeItem('profilePicture');
+      localStorage.removeItem('profilePictureFileName');
+      
+      // Clear UI
+      document.getElementById('profilePictureInput').value = '';
+      document.getElementById('profilePicturePreview').style.display = 'none';
+      document.getElementById('profilePictureImg').src = '';
+      document.getElementById('profilePictureFileName').textContent = '';
+      
+      logProgress('Profile picture removed.');
+    }
+    
+    function loadStoredProfilePicture() {
+      const storedImage = localStorage.getItem('profilePicture');
+      const storedFileName = localStorage.getItem('profilePictureFileName');
+      
+      if (storedImage && storedFileName) {
+        const preview = document.getElementById('profilePicturePreview');
+        const img = document.getElementById('profilePictureImg');
+        const fileName = document.getElementById('profilePictureFileName');
+        
+        img.src = storedImage;
+        fileName.textContent = storedFileName;
+        preview.style.display = 'flex';
+      }
+    }
+
+    // Template population and PDF generation functions
+    async function populateResumeTemplate(resumeContent) {
+      try {
+        // Parse the resume content using AI to extract structured data
+        const parsePrompt = `Parse the following resume content and extract structured data in JSON format. Return ONLY valid JSON with these exact fields:
+        {
+          "name": "Full Name",
+          "title": "Professional Title",
+          "email": "email@example.com",
+          "phone": "(555) 123-4567",
+          "location": "City, State",
+          "linkedin": "linkedin.com/in/profile",
+          "summary": "Professional summary paragraph",
+          "experience": [
+            {
+              "title": "Job Title",
+              "company": "Company Name",
+              "startDate": "Month Year",
+              "endDate": "Month Year",
+              "location": "City, State",
+              "achievements": ["Achievement 1", "Achievement 2", "Achievement 3"]
+            }
+          ],
+          "skills": {
+            "technical": "Comma-separated technical skills",
+            "professional": "Comma-separated professional skills"
+          },
+          "education": [
+            {
+              "degree": "Degree Type",
+              "field": "Field of Study",
+              "school": "Institution Name",
+              "year": "Graduation Year"
+            }
+          ]
+        }
+
+        Resume Content:
+        ${resumeContent}`;
+
+        const messages = [
+          { role: "system", content: "You are a data extraction specialist. Extract resume information and return ONLY valid JSON." },
+          { role: "user", content: parsePrompt }
+        ];
+
+        const result = await callChat(messages);
+        const jsonStr = result.choices[0].message.content.trim();
+        
+        // Clean the JSON response
+        const cleanJson = jsonStr.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+        const resumeData = JSON.parse(cleanJson);
+
+        // Store the parsed data globally for PDF generation
+        window.currentResumeData = resumeData;
+        
+        logProgress("Resume data parsed and ready for template rendering.");
+        
+      } catch (error) {
+        console.error('Error parsing resume content:', error);
+        logProgress("Warning: Using fallback template population method.");
+        
+        // Fallback: use the raw content
+        window.currentResumeData = {
+          name: "Professional Name",
+          title: "Professional Title",
+          email: "email@example.com",
+          phone: "(555) 123-4567",
+          location: "City, State",
+          linkedin: "linkedin.com/in/profile",
+          summary: resumeContent.substring(0, 500) + "...",
+          experience: [],
+          skills: { technical: "Various technical skills", professional: "Various professional skills" },
+          education: []
+        };
+      }
+    }
+
+    async function generatePDFFromTemplate() {
+      try {
+        // Load the resume template
+        const templateResponse = await fetch('./resume-template.html');
+        const templateHtml = await templateResponse.text();
+        
+        // Create a temporary iframe to render the template
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'absolute';
+        iframe.style.left = '-9999px';
+        iframe.style.width = '8.5in';
+        iframe.style.height = '11in';
+        document.body.appendChild(iframe);
+        
+        // Populate the template with data
+        const resumeData = window.currentResumeData;
+        let populatedHtml = templateHtml;
+        
+        // Replace placeholders with actual data
+        populatedHtml = populatedHtml.replace('[Candidate Name]', resumeData.name || 'Professional Name');
+        populatedHtml = populatedHtml.replace('[Professional Title]', resumeData.title || 'Professional Title');
+        populatedHtml = populatedHtml.replace('[Email]', resumeData.email || 'email@example.com');
+        populatedHtml = populatedHtml.replace('[Phone]', resumeData.phone || '(555) 123-4567');
+        populatedHtml = populatedHtml.replace('[Location]', resumeData.location || 'City, State');
+        populatedHtml = populatedHtml.replace('[LinkedIn]', resumeData.linkedin || 'linkedin.com/in/profile');
+        
+        // Replace summary
+        populatedHtml = populatedHtml.replace(
+          /\[Professional summary will be populated here[^\]]*\]/,
+          resumeData.summary || 'Professional summary will be populated here.'
+        );
+        
+        // Replace skills
+        populatedHtml = populatedHtml.replace('[Technical skills list]', resumeData.skills?.technical || 'Technical skills');
+        populatedHtml = populatedHtml.replace('[Professional skills list]', resumeData.skills?.professional || 'Professional skills');
+        
+        // Handle profile picture
+        const storedProfilePicture = localStorage.getItem('profilePicture');
+        if (storedProfilePicture) {
+          // Show profile picture and hide placeholder
+          populatedHtml = populatedHtml.replace(
+            'style="display: none;"',
+            `src="${storedProfilePicture}" style="display: block;"`
+          );
+          populatedHtml = populatedHtml.replace(
+            'class="profile-picture-placeholder"',
+            'class="profile-picture-placeholder" style="display: none;"'
+          );
+        } else {
+          // Show placeholder and hide profile picture
+          populatedHtml = populatedHtml.replace(
+            'id="profile-picture-placeholder"',
+            'id="profile-picture-placeholder" style="display: block;"'
+          );
+        }
+        
+        // Write to iframe
+        iframe.contentDocument.open();
+        iframe.contentDocument.write(populatedHtml);
+        iframe.contentDocument.close();
+        
+        // Wait for content to load
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Generate PDF using html2pdf
+        const element = iframe.contentDocument.body;
+        
+        // Use jsPDF with html2canvas for better rendering
+        const { jsPDF } = window.jspdf;
+        const html2canvas = window.html2canvas;
+        
+        if (html2canvas) {
+          const canvas = await html2canvas(element, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#ffffff'
+          });
+          
+          const imgData = canvas.toDataURL('image/png');
+          const pdf = new jsPDF('p', 'mm', 'a4');
+          const imgWidth = 210;
+          const pageHeight = 295;
+          const imgHeight = (canvas.height * imgWidth) / canvas.width;
+          let heightLeft = imgHeight;
+          let position = 0;
+          
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+          
+          while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+          }
+          
+          pdf.save('tailored-resume.pdf');
+        } else {
+          // Fallback to simple text-based PDF
+          const pdf = new jsPDF();
+          const text = iframe.contentDocument.body.innerText;
+          const splitText = pdf.splitTextToSize(text, 180);
+          pdf.text(splitText, 10, 10);
+          pdf.save('tailored-resume.pdf');
+        }
+        
+        // Clean up
+        document.body.removeChild(iframe);
+        
+      } catch (error) {
+        console.error('Error generating PDF from template:', error);
+        logProgress("Error generating styled PDF. Falling back to simple PDF.");
+        
+        // Fallback to original PDF generation
+        const outputText = document.getElementById('outputText').textContent;
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ compress: true });
+        doc.setFontSize(12);
+        doc.text("Tailored Resume", 10, 10);
+
+        let y = 20;
+        const lineHeight = 8;
+        const maxWidth = 180;
+        const marginTop = 20;
+        const bottom = doc.internal.pageSize.height - 20;
+
+        const lines = doc.splitTextToSize(outputText, maxWidth);
+        for (const line of lines) {
+          if (y > bottom) { doc.addPage(); y = marginTop; }
+          doc.text(line, 10, y);
+          y += lineHeight;
+        }
+
+        doc.save("tailored-resume.pdf");
+      }
+    }
+
+    // Show resume preview modal function
+    async function showResumePreviewModal() {
+      try {
+        console.log('Starting showResumePreviewModal function');
+        
+        // Get the resume data
+        const resumeData = window.currentResumeData;
+        console.log('Resume data:', resumeData);
+        
+        // Create the resume HTML directly instead of loading template
+        const resumeHtml = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: white;
+            font-size: 14px;
+            padding: 20px;
+        }
+        .resume-container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            background: white;
+            min-height: 11in;
+            padding: 0.75in;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #2563eb;
+        }
+        .header-content {
+            flex: 1;
+            text-align: center;
+        }
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #2563eb;
+            margin-right: 20px;
+        }
+        .profile-picture-placeholder {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+            margin-right: 20px;
+            border: 4px solid #2563eb;
+        }
+        .name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+        .title {
+            font-size: 1.3rem;
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .contact-item {
+            color: #4b5563;
+            font-size: 0.95rem;
+        }
+        .section {
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .summary {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #374151;
+            text-align: justify;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .skill-category h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        .skill-list {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="resume-container">
+        <div class="header">
+            ${localStorage.getItem('profilePicture') ? 
+              `<img src="${localStorage.getItem('profilePicture')}" alt="Profile Picture" class="profile-picture">` :
+              `<div class="profile-picture-placeholder">${(resumeData.name || 'P').charAt(0).toUpperCase()}</div>`
+            }
+            <div class="header-content">
+                <h1 class="name">${resumeData.name || 'Professional Name'}</h1>
+                <h2 class="title">${resumeData.title || 'Professional Title'}</h2>
+                <div class="contact-info">
+                    <span class="contact-item">📧 ${resumeData.email || 'email@example.com'}</span>
+                    <span class="contact-item">📱 ${resumeData.phone || '(555) 123-4567'}</span>
+                    <span class="contact-item">📍 ${resumeData.location || 'City, State'}</span>
+                    <span class="contact-item">💼 ${resumeData.linkedin || 'linkedin.com/in/profile'}</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3 class="section-title">Professional Summary</h3>
+            <p class="summary">${resumeData.summary || 'Professional summary will be populated here.'}</p>
+        </div>
+        
+        <div class="section">
+            <h3 class="section-title">Skills</h3>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h4>Technical Skills</h4>
+                    <div class="skill-list">${resumeData.skills?.technical || 'Technical skills'}</div>
+                </div>
+                <div class="skill-category">
+                    <h4>Professional Skills</h4>
+                    <div class="skill-list">${resumeData.skills?.professional || 'Professional skills'}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>`;
+        
+        // Create iframe for preview
+        const previewContent = document.getElementById('resumePreviewContent');
+        console.log('Preview content element:', previewContent);
+        previewContent.innerHTML = '';
+        
+        const iframe = document.createElement('iframe');
+        iframe.style.width = '100%';
+        iframe.style.height = '800px';
+        iframe.style.border = 'none';
+        previewContent.appendChild(iframe);
+        console.log('Iframe created and appended');
+        
+        // Write content to iframe
+        iframe.onload = function() {
+          console.log('Iframe loaded successfully');
+        };
+        
+        // Use srcdoc instead of contentDocument.write for better compatibility
+        iframe.srcdoc = resumeHtml;
+        console.log('Content set via srcdoc, resume HTML length:', resumeHtml.length);
+        
+        // Show the modal
+        console.log('Showing modal');
+        const modal = document.getElementById('resumePreviewModal');
+        console.log('Modal element:', modal);
+        if (modal) {
+          modal.style.display = 'flex';
+          console.log('Modal display set to flex');
+        } else {
+          console.error('Modal element not found!');
+        }
+        
+      } catch (error) {
+        console.error('Error showing resume preview:', error);
+        logProgress("Error showing resume preview.");
+      }
+    }
+
+    // Analysis modal event listeners
+    document.getElementById('closeAnalysisModal').addEventListener('click', function() {
+      document.getElementById('analysisModal').style.display = 'none';
+    });
+
+    document.getElementById('selectAllAnalysis').addEventListener('click', function() {
+      const checkboxes = document.querySelectorAll('#analysisResults input[type="checkbox"]');
+      checkboxes.forEach(checkbox => checkbox.checked = true);
+    });
+
+    document.getElementById('deselectAllAnalysis').addEventListener('click', function() {
+      const checkboxes = document.querySelectorAll('#analysisResults input[type="checkbox"]');
+      checkboxes.forEach(checkbox => checkbox.checked = false);
+    });
+
+    document.getElementById('cancelAnalysis').addEventListener('click', function() {
+      document.getElementById('analysisModal').style.display = 'none';
+    });
+
+    document.getElementById('addSelectedPhrases').addEventListener('click', addSelectedPhrasesToBanks);
+    
+    // Profile picture input event listener
+    document.getElementById('profilePictureInput').addEventListener('change', handleProfilePictureUpload);
+    
+    // Load stored profile picture on page load
+    loadStoredProfilePicture();
+    
+    // Download PDF button
+    document.getElementById('downloadPdfBtn').addEventListener('click', function() {
+      const outputText = document.getElementById('outputText').textContent;
+      if (!outputText) return;
+      
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ compress: true });
+      doc.setFontSize(12);
+      doc.text("Tailored Resume", 10, 10);
+
+      let y = 20;
+      const lineHeight = 8;
+      const maxWidth = 180;
+      const marginTop = 20;
+      const bottom = doc.internal.pageSize.height - 20;
+
+      const lines = doc.splitTextToSize(outputText, maxWidth);
+      for (const line of lines) {
+        if (y > bottom) { doc.addPage(); y = marginTop; }
+        doc.text(line, 10, y);
+        y += lineHeight;
+      }
+
+      doc.save("tailored-resume.pdf");
+    });
+    
+    // Resume preview modal event listeners
+    document.getElementById('closePreviewBtn').addEventListener('click', function() {
+      document.getElementById('resumePreviewModal').style.display = 'none';
+    });
+    
+    document.getElementById('saveAsPdfBtn').addEventListener('click', async function() {
+      try {
+        // Use the existing generatePDFFromTemplate function
+        await generatePDFFromTemplate();
+        logProgress("PDF saved successfully.");
+      } catch (error) {
+        console.error('Error saving PDF:', error);
+        logProgress("Error saving PDF.");
+      }
+    });
+    
+    // Generate button
+    document.getElementById('generateBtn').addEventListener('click', async function() {
+      const currentResumeText = document.getElementById('currentResumeText').value.trim();
+      const enableRefinement = document.getElementById('enableRefinement').checked;
+      const passes = enableRefinement ? 2 : 0;
+
+      if (!currentResumeText) {
+        alert('Please paste your current resume.');
+        return;
+      }
+
+      document.getElementById('progressModal').style.display = 'flex';
+      document.getElementById('closeModalBtn').style.display = 'none';
+      document.getElementById('progressLog').textContent = '';
+
+      try {
+        setPhase("Phase 1/3 — Resume Enhancement");
+        logProgress("Building context from word banks...");
+
+        const sharedContext = buildSharedContext();
+
+        let fullPrompt = `${sharedContext}Enhance and optimize the following resume using the provided guidelines and word banks:\n\nCURRENT RESUME:\n${currentResumeText}`;
+
+        fullPrompt += `\n\nPlease enhance the resume by:
+1. Improving language using the provided action verbs and achievement phrases
+2. Incorporating relevant skills and keywords from the word banks
+3. Quantifying achievements where possible
+4. Maintaining professional formatting and structure
+5. Following the resume guidelines provided above`;
+
+        const messages = [
+          { role: "system", content: "You are an expert resume writer and career coach. Enhance resumes using provided guidelines and word banks while maintaining authenticity and professional standards." },
+          { role: "user", content: fullPrompt }
+        ];
+
+        logProgress("Generating enhanced resume...");
+        const result = await callChat(messages);
+
+        if (!result.choices || !result.choices[0]) {
+          throw new Error('Invalid API response');
+        }
+
+        const initialResume = result.choices[0].message.content;
+        logProgress("Initial tailored resume received.");
+
+        setPhase("Phase 2/3 — Refinement");
+        const refinedResume = await refineParagraphsIfEnabled(initialResume, sharedContext, passes);
+        logProgress("Refinement complete.");
+
+        // Parse and populate the HTML template
+        await populateResumeTemplate(refinedResume);
+        
+        // Display the resume in the output area
+        document.getElementById('outputText').textContent = refinedResume;
+        document.getElementById('outputSection').style.display = 'block';
+        logProgress("Tailored resume displayed in output area.");
+
+        setPhase("Phase 3/3 — Resume Preview");
+        logProgress("Preparing resume preview…");
+
+        // Show the resume preview modal instead of generating PDF directly
+        await showResumePreviewModal();
+        logProgress("Resume preview ready.");
+        showCompletionState();
+      } catch (err) {
+        setPhase("Error");
+        logProgress("Error: " + err.message);
+        document.getElementById('closeModalBtn').style.display = "block";
+        document.getElementById('closeModalBtn').textContent = "Close";
+        document.getElementById('closeModalBtn').className = "mt-4 bg-red-600 text-white px-4 py-2 rounded w-full";
+      }
+    });
+  });
+</script>
+
+<!-- Resume Preview Modal -->
+<div id="resumePreviewModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>Resume Preview</h2>
+      <button id="saveAsPdfBtn" class="save-pdf-btn">💾 Save as PDF</button>
+      <button id="closePreviewBtn" class="close-btn">✕</button>
+    </div>
+    <div class="modal-content">
+      <div id="resumePreviewContent" class="resume-preview-content">
+        <!-- Resume template will be rendered here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
