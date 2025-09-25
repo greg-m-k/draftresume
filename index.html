@@ -1013,12 +1013,10 @@
 
   /* ==================== API COMMUNICATION ==================== */
   async function callChat(messages, temperature = 0.3) {
-    const response = await fetch('https://gateway.ai.cloudflare.com/v1/a5ac50eac3fc3bba71323b08817bd04e/drafting-gateway/openai/chat/completions', {
+    const response = await fetch('https://proxy.draftresume.app/v1/chat/completions', {
       method: 'POST',
-      mode: 'cors',
       headers: {
-        'Content-Type': 'application/json',
-        'cf-aig-authorization': 'Bearer IWiI5543bX0pRivT38JoUnkIyj1gg2v_CxQlm8KS'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         model: 'gpt-4o-mini',
@@ -1028,7 +1026,7 @@
     });
     
     const data = await response.json();
-    if (!response.ok) throw new Error(data?.error?.message || "Cloudflare Gateway error");
+    if (!response.ok) throw new Error(data?.error?.message || "Proxy error");
     return data;
   }
 
