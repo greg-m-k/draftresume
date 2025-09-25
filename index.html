@@ -16,6 +16,7 @@
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   
+  
   <!-- Custom Styles -->
   <style>
     /* Modal Styles */
@@ -38,6 +39,37 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 12px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+      position: relative;
+    }
+    
+    /* Progress Modal Sparkling Icon */
+    .progress-sparkle-icon {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      animation: progressSparkle 2.5s ease-in-out infinite;
+      z-index: 10;
+    }
+    
+    @keyframes progressSparkle {
+      0%, 100% { 
+        transform: scale(1) rotate(0deg);
+        opacity: 0.8;
+      }
+      25% { 
+        transform: scale(1.1) rotate(5deg);
+        opacity: 1;
+      }
+      50% { 
+        transform: scale(1.15) rotate(0deg);
+        opacity: 0.9;
+      }
+      75% { 
+        transform: scale(1.1) rotate(-5deg);
+        opacity: 1;
+      }
     }
     #addItemModal {
       display: none;
@@ -298,7 +330,7 @@
 
         <!-- Text Analyzer -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h3 class="text-lg font-semibold text-gray-800 mb-2">Job Description Analyzer</h3>
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Job Description Analyzer (optional)</h3>
           <p class="text-xs text-gray-500 px-1 -mt-1 mb-3">Paste job descriptions to extract key phrases for your resume word banks</p>
           <textarea id="analyzerText" rows="6" placeholder="Paste job description here..." class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-vertical mb-3"></textarea>
           <div class="flex flex-wrap gap-2">
@@ -357,8 +389,8 @@
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-semibold text-gray-800">Tailored Resume</h3>
             <div class="flex space-x-2">
-              <button id="copyBtn" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium">
-                Copy Text
+              <button id="downloadDocBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium">
+                Download as Doc
               </button>
               <button id="downloadPdfBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
                 Download PDF
@@ -462,6 +494,27 @@
   <!-- Progress Modal -->
   <div id="progressModal">
     <div id="progressBox">
+      <!-- Animated Sparkling Icon -->
+      <div class="progress-sparkle-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="sparkle-title sparkle-desc">
+          <title id="sparkle-title">AI Processing</title>
+          <desc id="sparkle-desc">Sparkling AI magic indicator</desc>
+          <!-- Main sparkle star -->
+          <path d="M16 2l2.4 4.8 4.8 2.4-4.8 2.4-2.4 4.8-2.4-4.8-4.8-2.4 4.8-2.4z" fill="#3b82f6" stroke="#1d4ed8" stroke-width="0.5"/>
+          <!-- Secondary sparkles -->
+          <path d="M8 8l1.2 2.4 2.4 1.2-2.4 1.2-1.2 2.4-1.2-2.4-2.4-1.2 2.4-1.2z" fill="#60a5fa" stroke="#3b82f6" stroke-width="0.3"/>
+          <path d="M24 8l1.2 2.4 2.4 1.2-2.4 1.2-1.2 2.4-1.2-2.4-2.4-1.2 2.4-1.2z" fill="#60a5fa" stroke="#3b82f6" stroke-width="0.3"/>
+          <path d="M8 24l1.2 2.4 2.4 1.2-2.4 1.2-1.2 2.4-1.2-2.4-2.4-1.2 2.4-1.2z" fill="#60a5fa" stroke="#3b82f6" stroke-width="0.3"/>
+          <path d="M24 24l1.2 2.4 2.4 1.2-2.4 1.2-1.2 2.4-1.2-2.4-2.4-1.2 2.4-1.2z" fill="#60a5fa" stroke="#3b82f6" stroke-width="0.3"/>
+          <!-- Small accent dots -->
+          <circle cx="12" cy="6" r="1" fill="#93c5fd"/>
+          <circle cx="20" cy="6" r="1" fill="#93c5fd"/>
+          <circle cx="6" cy="16" r="1" fill="#93c5fd"/>
+          <circle cx="26" cy="16" r="1" fill="#93c5fd"/>
+          <circle cx="12" cy="26" r="1" fill="#93c5fd"/>
+          <circle cx="20" cy="26" r="1" fill="#93c5fd"/>
+        </svg>
+      </div>
       <div id="progressPhase" class="font-bold mb-2">Initializing...</div>
       <div id="progressLog" class="whitespace-pre-wrap text-xs text-gray-600 max-h-60 overflow-y-auto"></div>
       <button id="closeModalBtn" style="display:none;" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded w-full">Close</button>
@@ -525,80 +578,80 @@
   /* ==================== JOB FIELD PRESETS ==================== */
   const jobFields = {
     technology: {
-      actionVerbs: "Developed\nImplemented\nOptimized\nArchitected\nDebugged\nAutomated\nIntegrated\nDeployed\nMaintained\nRefactored",
-      skillsKeywords: "JavaScript\nPython\nReact\nNode.js\nAWS\nDocker\nKubernetes\nAgile\nScrum\nGit",
-      achievementPhrases: "Increased system performance by\nReduced load time by\nImproved code efficiency\nLed development team of\nDelivered project ahead of schedule\nScaled application to handle",
-      industryTerms: "Full-stack\nDevOps\nCI/CD\nMicroservices\nAPI\nDatabase\nCloud computing\nMachine learning\nArtificial intelligence\nSoftware architecture",
+      actionVerbs: "Developed\nImplemented\nOptimized\nArchitected\nDebugged",
+      skillsKeywords: "JavaScript\nPython\nReact\nNode.js\nAWS",
+      achievementPhrases: "Increased system performance by\nReduced load time by\nImproved code efficiency\nLed development team of\nDelivered project ahead of schedule",
+      industryTerms: "Full-stack\nDevOps\nCI/CD\nMicroservices\nAPI",
       resumeGuidelines: "1. Start each bullet point with a strong action verb (developed, implemented, optimized, led, etc.)\n2. Quantify achievements with specific metrics (increased performance by 40%, managed team of 12, reduced costs by $50K)\n3. Use the STAR method: Situation, Task, Action, Result for complex achievements\n4. Tailor technical skills to match job requirements and include proficiency levels\n5. Keep bullet points concise (1-2 lines max) but impactful\n6. Use reverse chronological order with consistent formatting\n7. Include relevant certifications, training, and continuous learning initiatives\n8. Highlight cross-functional collaboration and leadership experience\n9. Focus on business impact and problem-solving capabilities\n10. Proofread for grammar, consistency, and ATS-friendly formatting"
     },
     healthcare: {
-      actionVerbs: "Administered\nDiagnosed\nTreated\nMonitored\nAssessed\nCounseled\nEducated\nCoordinated\nDocumented\nCollaborated",
-      skillsKeywords: "Patient care\nMedical records\nClinical assessment\nPharmacology\nInfection control\nEMR systems\nCPR certified\nBLS\nACLS\nHIPAA compliance",
-      achievementPhrases: "Improved patient satisfaction scores by\nReduced readmission rates\nManaged caseload of\nImplemented safety protocols\nTrained staff on\nAchieved quality metrics",
-      industryTerms: "Evidence-based practice\nInterdisciplinary team\nQuality assurance\nPatient advocacy\nClinical protocols\nHealthcare informatics\nTelehealth\nPopulation health\nContinuous improvement\nRegulatory compliance",
+      actionVerbs: "Administered\nDiagnosed\nTreated\nMonitored\nAssessed",
+      skillsKeywords: "Patient care\nMedical records\nClinical assessment\nPharmacology\nInfection control",
+      achievementPhrases: "Improved patient satisfaction scores by\nReduced readmission rates\nManaged caseload of\nImplemented safety protocols\nTrained staff on",
+      industryTerms: "Evidence-based practice\nInterdisciplinary team\nQuality assurance\nPatient advocacy\nClinical protocols",
       resumeGuidelines: "1. Highlight patient care experience and clinical skills.\n2. Include relevant certifications and licenses.\n3. Emphasize compliance with healthcare regulations.\n4. Quantify patient outcomes and quality improvements.\n5. Show commitment to continuing education and professional development."
     },
     finance: {
-      actionVerbs: "Analyzed\nForecasted\nBudgeted\nAudited\nReconciled\nValued\nModeled\nOptimized\nNegotiated\nManaged",
-      skillsKeywords: "Financial modeling\nRisk analysis\nExcel\nSQL\nTableau\nBloomberg\nGAAP\nIFRS\nCompliance\nPortfolio management",
-      achievementPhrases: "Increased revenue by\nReduced costs by\nManaged portfolio worth\nImproved ROI\nStreamlined processes\nIdentified savings of",
-      industryTerms: "Due diligence\nAsset management\nDerivatives\nHedge funds\nPrivate equity\nInvestment banking\nCredit analysis\nRegulatory reporting\nCapital markets\nFinancial planning",
+      actionVerbs: "Analyzed\nForecasted\nBudgeted\nAudited\nReconciled",
+      skillsKeywords: "Financial modeling\nRisk analysis\nExcel\nSQL\nTableau",
+      achievementPhrases: "Increased revenue by\nReduced costs by\nManaged portfolio worth\nImproved ROI\nStreamlined processes",
+      industryTerms: "Due diligence\nAsset management\nDerivatives\nHedge funds\nPrivate equity",
       resumeGuidelines: "1. Quantify financial impact and achievements with specific numbers.\n2. Highlight analytical and technical skills.\n3. Include relevant certifications (CFA, CPA, FRM).\n4. Emphasize regulatory knowledge and compliance experience.\n5. Show experience with financial software and modeling tools."
     },
     marketing: {
-      actionVerbs: "Launched\nPromoted\nStrategized\nTargeted\nEngaged\nOptimized\nAnalyzed\nCreated\nExecuted\nMeasured",
-      skillsKeywords: "Digital marketing\nSEO\nSEM\nSocial media\nContent marketing\nGoogle Analytics\nHubSpot\nSalesforce\nA/B testing\nMarketing automation",
-      achievementPhrases: "Increased brand awareness by\nGenerated leads worth\nImproved conversion rates\nGrew social media following\nLaunched successful campaigns\nAchieved ROI of",
-      industryTerms: "Customer acquisition\nBrand positioning\nMarket segmentation\nLead generation\nCustomer journey\nOmnichannel\nInfluencer marketing\nPerformance marketing\nMarketing funnel\nCustomer lifetime value",
+      actionVerbs: "Launched\nPromoted\nStrategized\nTargeted\nEngaged",
+      skillsKeywords: "Digital marketing\nSEO\nSEM\nSocial media\nContent marketing",
+      achievementPhrases: "Increased brand awareness by\nGenerated leads worth\nImproved conversion rates\nGrew social media following\nLaunched successful campaigns",
+      industryTerms: "Customer acquisition\nBrand positioning\nMarket segmentation\nLead generation\nCustomer journey",
       resumeGuidelines: "1. Quantify marketing results with metrics (CTR, conversion rates, ROI).\n2. Highlight experience with digital marketing tools and platforms.\n3. Show creativity and strategic thinking in campaigns.\n4. Include experience with data analysis and performance optimization.\n5. Demonstrate understanding of customer behavior and market trends."
     },
     sales: {
-      actionVerbs: "Sold\nNegotiated\nClosed\nProspected\nPresented\nBuilt\nMaintained\nExceeded\nGenerated\nConverted",
-      skillsKeywords: "CRM\nSalesforce\nLead generation\nAccount management\nB2B sales\nB2C sales\nSales forecasting\nPipeline management\nCustomer retention\nSales analytics",
-      achievementPhrases: "Exceeded quota by\nGenerated revenue of\nClosed deals worth\nBuilt territory from\nAchieved retention rate of\nRanked top performer",
-      industryTerms: "Sales cycle\nProspecting\nQualification\nSolution selling\nConsultative selling\nAccount-based selling\nSales enablement\nCustomer success\nUpselling\nCross-selling",
+      actionVerbs: "Sold\nNegotiated\nClosed\nProspected\nPresented",
+      skillsKeywords: "CRM\nSalesforce\nLead generation\nAccount management\nB2B sales",
+      achievementPhrases: "Exceeded quota by\nGenerated revenue of\nClosed deals worth\nBuilt territory from\nAchieved retention rate of",
+      industryTerms: "Sales cycle\nProspecting\nQualification\nSolution selling\nConsultative selling",
       resumeGuidelines: "1. Lead with quantifiable sales achievements and quota performance.\n2. Highlight relationship-building and communication skills.\n3. Include experience with CRM systems and sales tools.\n4. Show progression in sales targets and territory growth.\n5. Emphasize customer satisfaction and retention metrics."
     },
     education: {
-      actionVerbs: "Taught\nDeveloped\nDesigned\nFacilitated\nMentored\nAssessed\nResearched\nPublished\nPresented\nCollaborated",
-      skillsKeywords: "Curriculum development\nLearning management systems\nClassroom management\nEducational technology\nAssessment design\nDifferentiated instruction\nStudent engagement\nData analysis\nProfessional development\nAccreditation",
-      achievementPhrases: "Improved student performance by\nDeveloped curriculum for\nTrained faculty on\nIncreased graduation rates\nPublished research on\nReceived teaching excellence award",
-      industryTerms: "Pedagogy\nAndragogy\nBlended learning\nOnline education\nCompetency-based education\nStudent-centered learning\nFormative assessment\nSummative assessment\nInstructional design\nEducational outcomes",
+      actionVerbs: "Taught\nDeveloped\nDesigned\nFacilitated\nMentored",
+      skillsKeywords: "Curriculum development\nLearning management systems\nClassroom management\nEducational technology\nAssessment design",
+      achievementPhrases: "Improved student performance by\nDeveloped curriculum for\nTrained faculty on\nIncreased graduation rates\nPublished research on",
+      industryTerms: "Pedagogy\nAndragogy\nBlended learning\nOnline education\nCompetency-based education",
       resumeGuidelines: "1. Highlight student outcomes and learning achievements.\n2. Include relevant teaching certifications and credentials.\n3. Emphasize curriculum development and instructional design experience.\n4. Show commitment to professional development and continuing education.\n5. Quantify impact on student success and institutional goals."
     },
     engineering: {
-      actionVerbs: "Designed\nEngineered\nAnalyzed\nOptimized\nTested\nValidated\nImplemented\nManufactured\nTroubleshooted\nImproved",
-      skillsKeywords: "CAD software\nProject management\nQuality assurance\nLean manufacturing\nSix Sigma\nFEA analysis\nPrototyping\nTechnical documentation\nRegulatory compliance\nCross-functional collaboration",
-      achievementPhrases: "Reduced manufacturing costs by\nImproved product efficiency\nLed engineering team of\nDelivered project under budget\nIncreased production capacity\nAchieved quality standards",
-      industryTerms: "Product lifecycle\nDesign for manufacturing\nContinuous improvement\nRoot cause analysis\nRisk assessment\nTechnical specifications\nEngineering standards\nProcess optimization\nInnovation management\nSustainability",
+      actionVerbs: "Designed\nEngineered\nAnalyzed\nOptimized\nTested",
+      skillsKeywords: "CAD software\nProject management\nQuality assurance\nLean manufacturing\nSix Sigma",
+      achievementPhrases: "Reduced manufacturing costs by\nImproved product efficiency\nLed engineering team of\nDelivered project under budget\nIncreased production capacity",
+      industryTerms: "Product lifecycle\nDesign for manufacturing\nContinuous improvement\nRoot cause analysis\nRisk assessment",
       resumeGuidelines: "1. Emphasize technical expertise and problem-solving abilities.\n2. Include relevant engineering certifications and licenses.\n3. Highlight project management and leadership experience.\n4. Quantify engineering achievements with specific metrics.\n5. Show experience with industry-standard tools and methodologies."
     },
     consulting: {
-      actionVerbs: "Advised\nStrategized\nAnalyzed\nRecommended\nImplemented\nOptimized\nTransformed\nFacilitated\nPresented\nDelivered",
-      skillsKeywords: "Strategic planning\nBusiness analysis\nChange management\nStakeholder management\nData analysis\nPresentation skills\nProject management\nProcess improvement\nClient relationship management\nIndustry expertise",
-      achievementPhrases: "Delivered cost savings of\nImproved operational efficiency\nLed transformation initiative\nManaged client portfolio worth\nAchieved client satisfaction score\nGenerated new business revenue",
-      industryTerms: "Management consulting\nStrategy consulting\nOperational excellence\nDigital transformation\nOrganizational change\nBusiness process reengineering\nPerformance improvement\nDue diligence\nMarket analysis\nBest practices",
+      actionVerbs: "Advised\nStrategized\nAnalyzed\nRecommended\nImplemented",
+      skillsKeywords: "Strategic planning\nBusiness analysis\nChange management\nStakeholder management\nData analysis",
+      achievementPhrases: "Delivered cost savings of\nImproved operational efficiency\nLed transformation initiative\nManaged client portfolio worth\nAchieved client satisfaction score",
+      industryTerms: "Management consulting\nStrategy consulting\nOperational excellence\nDigital transformation\nOrganizational change",
       resumeGuidelines: "1. Highlight client impact and business results achieved.\n2. Emphasize analytical and strategic thinking capabilities.\n3. Include experience across multiple industries or functional areas.\n4. Show progression in project complexity and client responsibility.\n5. Demonstrate strong communication and presentation skills."
     },
     creative: {
-      actionVerbs: "Created\nDesigned\nConceptualized\nIllustrated\nProduced\nDirected\nCollaborated\nInnovated\nVisualized\nExecuted",
-      skillsKeywords: "Adobe Creative Suite\nUI/UX design\nBrand development\nVisual storytelling\nTypography\nColor theory\nPrototyping\nUser research\nDesign thinking\nCreative direction",
-      achievementPhrases: "Increased brand engagement by\nWon design award for\nLed creative team of\nDelivered campaign that generated\nImproved user experience\nCreated visual identity for",
-      industryTerms: "Brand identity\nVisual communication\nUser experience\nCreative strategy\nArt direction\nDesign systems\nMultimedia production\nDigital design\nPrint design\nCreative process",
+      actionVerbs: "Created\nDesigned\nConceptualized\nIllustrated\nProduced",
+      skillsKeywords: "Adobe Creative Suite\nUI/UX design\nBrand development\nVisual storytelling\nTypography",
+      achievementPhrases: "Increased brand engagement by\nWon design award for\nLed creative team of\nDelivered campaign that generated\nImproved user experience",
+      industryTerms: "Brand identity\nVisual communication\nUser experience\nCreative strategy\nArt direction",
       resumeGuidelines: "1. Showcase creative portfolio and design achievements.\n2. Highlight experience with design tools and technologies.\n3. Emphasize collaboration with cross-functional teams.\n4. Include awards, recognition, and published work.\n5. Show understanding of brand strategy and user needs."
     },
     legal: {
-      actionVerbs: "Advised\nNegotiated\nDrafted\nReviewed\nLitigated\nResearched\nComplied\nRepresented\nAnalyzed\nManaged",
-      skillsKeywords: "Legal research\nContract negotiation\nCompliance management\nRisk assessment\nLegal writing\nCase management\nRegulatory knowledge\nIntellectual property\nCorporate law\nLitigation support",
-      achievementPhrases: "Successfully negotiated contracts worth\nReduced legal costs by\nManaged caseload of\nAchieved favorable settlement\nEnsured regulatory compliance\nLed legal team of",
-      industryTerms: "Due diligence\nLegal precedent\nStatutory compliance\nContract law\nIntellectual property\nCorporate governance\nRisk management\nLegal strategy\nDispute resolution\nRegulatory affairs",
+      actionVerbs: "Advised\nNegotiated\nDrafted\nReviewed\nLitigated",
+      skillsKeywords: "Legal research\nContract negotiation\nCompliance management\nRisk assessment\nLegal writing",
+      achievementPhrases: "Successfully negotiated contracts worth\nReduced legal costs by\nManaged caseload of\nAchieved favorable settlement\nEnsured regulatory compliance",
+      industryTerms: "Due diligence\nLegal precedent\nStatutory compliance\nContract law\nIntellectual property",
       resumeGuidelines: "1. Highlight bar admissions and legal certifications.\n2. Emphasize successful case outcomes and legal achievements.\n3. Include experience with relevant legal areas and industries.\n4. Show strong analytical and research capabilities.\n5. Demonstrate client service and business acumen."
     },
     nonprofit: {
-      actionVerbs: "Advocated\nOrganized\nFundraised\nVolunteered\nMobilized\nEducated\nSupported\nEmpowered\nCoordinated\nImpacted",
-      skillsKeywords: "Grant writing\nFundraising\nVolunteer management\nCommunity outreach\nProgram development\nStakeholder engagement\nSocial impact\nAdvocacy\nNonprofit management\nDonor relations",
-      achievementPhrases: "Raised funds totaling\nIncreased program participation by\nManaged volunteer team of\nSecured grants worth\nImproved community outcomes\nExpanded services to reach",
-      industryTerms: "Social impact\nCommunity development\nProgram evaluation\nCapacity building\nSocial justice\nAdvocacy campaigns\nPartnership development\nSustainability\nMission-driven\nStakeholder engagement",
+      actionVerbs: "Advocated\nOrganized\nFundraised\nVolunteered\nMobilized",
+      skillsKeywords: "Grant writing\nFundraising\nVolunteer management\nCommunity outreach\nProgram development",
+      achievementPhrases: "Raised funds totaling\nIncreased program participation by\nManaged volunteer team of\nSecured grants worth\nImproved community outcomes",
+      industryTerms: "Social impact\nCommunity development\nProgram evaluation\nCapacity building\nSocial justice",
       resumeGuidelines: "1. Emphasize mission alignment and passion for the cause.\n2. Highlight measurable social impact and program outcomes.\n3. Include fundraising achievements and grant success.\n4. Show experience with volunteer management and community engagement.\n5. Demonstrate resourcefulness and ability to do more with less."
     }
   };
@@ -657,7 +710,7 @@
         
         // Create remove button
         const removeBtn = document.createElement('button');
-        removeBtn.className = 'ml-2 text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold';
+        removeBtn.className = 'ml-2 text-red-500 hover:text-red-700 opacity-70 md:opacity-0 md:group-hover:opacity-100 transition-opacity text-sm font-bold min-w-[24px] min-h-[24px] flex items-center justify-center rounded-full hover:bg-red-50 active:bg-red-100';
         removeBtn.innerHTML = '✕';
         removeBtn.title = 'Remove item';
         removeBtn.onclick = () => removeItemFromBank(containerId, index);
@@ -1251,32 +1304,131 @@
       document.getElementById('progressModal').style.display = 'none';
     });
     
-    // Copy button
-    document.getElementById('copyBtn').addEventListener('click', function() {
-      const outputText = document.getElementById('outputText').textContent;
-      navigator.clipboard.writeText(outputText).then(function() {
-        // Temporarily change button text to show success
-        const btn = document.getElementById('copyBtn');
+    // Download as Doc button
+    document.getElementById('downloadDocBtn').addEventListener('click', function() {
+      try {
+        // Get the resume HTML content
+        const outputElement = document.getElementById('outputText');
+        let htmlContent = outputElement.innerHTML;
+        
+        // Clean up the HTML and add proper styling for Word compatibility
+        const cleanHtml = `
+<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" 
+      xmlns:w="urn:schemas-microsoft-com:office:word" 
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta charset="utf-8">
+  <title>Resume</title>
+  <!--[if gte mso 9]>
+  <xml>
+    <w:WordDocument>
+      <w:View>Print</w:View>
+      <w:Zoom>90</w:Zoom>
+      <w:DoNotPromptForConvert/>
+      <w:DoNotShowInsertionsAndDeletions/>
+    </w:WordDocument>
+  </xml>
+  <![endif]-->
+  <style>
+    @page {
+      margin: 1in;
+    }
+    body {
+      font-family: 'Times New Roman', serif;
+      font-size: 12pt;
+      line-height: 1.15;
+      margin: 0;
+      padding: 0;
+    }
+    h1, h2, h3 {
+      color: #2563eb;
+      margin-top: 12pt;
+      margin-bottom: 6pt;
+    }
+    h1 {
+      font-size: 18pt;
+      text-align: center;
+      border-bottom: 2pt solid #2563eb;
+      padding-bottom: 6pt;
+    }
+    h2 {
+      font-size: 14pt;
+      text-decoration: underline;
+    }
+    h3 {
+      font-size: 12pt;
+      font-weight: bold;
+    }
+    p {
+      margin-top: 0;
+      margin-bottom: 6pt;
+    }
+    .contact-info {
+      text-align: center;
+      margin-bottom: 12pt;
+    }
+    .section {
+      margin-bottom: 12pt;
+    }
+    .experience-item, .education-item {
+      margin-bottom: 8pt;
+    }
+    .job-title, .degree {
+      font-weight: bold;
+    }
+    .company, .school {
+      font-style: italic;
+    }
+    .duration {
+      color: #666;
+    }
+    ul {
+      margin-top: 3pt;
+      margin-bottom: 6pt;
+    }
+    li {
+      margin-bottom: 2pt;
+    }
+  </style>
+</head>
+<body>
+  ${htmlContent}
+</body>
+</html>`;
+
+        // Create blob with proper MIME type for Word
+        const blob = new Blob([cleanHtml], {
+          type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        });
+        
+        // Create download link
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'resume.docx';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        // Show success feedback
+        const btn = document.getElementById('downloadDocBtn');
         const originalText = btn.textContent;
-        btn.textContent = 'Copied!';
-        btn.className = 'bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium';
+        btn.textContent = 'Downloaded!';
+        btn.className = 'bg-green-800 text-white px-4 py-2 rounded-lg hover:bg-green-900 transition-colors text-sm font-medium';
         setTimeout(() => {
           btn.textContent = originalText;
-          btn.className = 'bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium';
+          btn.className = 'bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium';
         }, 2000);
-      });
+
+      } catch (error) {
+        console.error('Error generating DOCX:', error);
+        alert('Error generating document. Please try again.');
+      }
     });
 
-    // Download PDF button
-    document.getElementById('downloadPdfBtn').addEventListener('click', function() {
-      const outputText = document.getElementById('outputText').textContent;
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      
-      const splitText = doc.splitTextToSize(outputText, 180);
-      doc.text(splitText, 10, 10);
-      doc.save('tailored-resume.pdf');
-    });
+
 
     // Profile picture handling functions
     function handleProfilePictureUpload() {
@@ -1332,6 +1484,9 @@
       logProgress('Profile picture removed.');
     }
     
+    // Make function globally accessible
+    window.removeProfilePicture = removeProfilePicture;
+    
     function loadStoredProfilePicture() {
       const storedImage = localStorage.getItem('profilePicture');
       const storedFileName = localStorage.getItem('profilePictureFileName');
@@ -1348,6 +1503,67 @@
     }
 
     // Template population and PDF generation functions
+    async function displayFormattedResume() {
+      try {
+        // Load the resume template
+        const templateResponse = await fetch('./resume-template.html');
+        const templateHtml = await templateResponse.text();
+        
+        // Get the parsed resume data
+        const resumeData = window.currentResumeData;
+        let populatedHtml = templateHtml;
+        
+        // Replace placeholders with actual data
+        populatedHtml = populatedHtml.replace('[Candidate Name]', resumeData.name || 'Professional Name');
+        populatedHtml = populatedHtml.replace('[Professional Title]', resumeData.title || 'Professional Title');
+        populatedHtml = populatedHtml.replace('[Email]', resumeData.email || 'email@example.com');
+        populatedHtml = populatedHtml.replace('[Phone]', resumeData.phone || '(555) 123-4567');
+        populatedHtml = populatedHtml.replace('[Location]', resumeData.location || 'City, State');
+        populatedHtml = populatedHtml.replace('[LinkedIn]', resumeData.linkedin || 'linkedin.com/in/profile');
+        
+        // Replace summary
+        populatedHtml = populatedHtml.replace(
+          /\[Professional summary will be populated here[^\]]*\]/,
+          resumeData.summary || 'Professional summary will be populated here.'
+        );
+        
+        // Replace skills
+        populatedHtml = populatedHtml.replace('[Technical skills list]', resumeData.skills?.technical || 'Technical skills');
+        populatedHtml = populatedHtml.replace('[Professional skills list]', resumeData.skills?.professional || 'Professional skills');
+        
+        // Handle profile picture
+        const storedProfilePicture = localStorage.getItem('profilePicture');
+        if (storedProfilePicture) {
+          // Replace the img tag to show profile picture
+          populatedHtml = populatedHtml.replace(
+            '<img id="profile-picture" class="profile-picture" src="" alt="Profile Picture" style="display: none;" />',
+            `<img id="profile-picture" class="profile-picture" src="${storedProfilePicture}" alt="Profile Picture" style="display: block;" />`
+          );
+          // Hide the placeholder
+          populatedHtml = populatedHtml.replace(
+            '<div class="profile-picture-placeholder" id="profile-picture-placeholder"></div>',
+            '<div class="profile-picture-placeholder" id="profile-picture-placeholder" style="display: none;"></div>'
+          );
+        } else {
+          // Show placeholder with first letter of name
+          const firstLetter = (resumeData.name || 'P').charAt(0).toUpperCase();
+          populatedHtml = populatedHtml.replace(
+            '<div class="profile-picture-placeholder" id="profile-picture-placeholder"></div>',
+            `<div class="profile-picture-placeholder" id="profile-picture-placeholder" style="display: block;">${firstLetter}</div>`
+          );
+        }
+        
+        // Display the formatted HTML in the output area
+        document.getElementById('outputText').innerHTML = populatedHtml;
+        
+      } catch (error) {
+        console.error('Error displaying formatted resume:', error);
+        // Fallback to showing the raw resume content
+        const resumeData = window.currentResumeData;
+        document.getElementById('outputText').textContent = resumeData.summary || 'Error loading resume template';
+      }
+    }
+
     async function populateResumeTemplate(resumeContent) {
       try {
         // Parse the resume content using AI to extract structured data
@@ -1463,20 +1679,22 @@
         // Handle profile picture
         const storedProfilePicture = localStorage.getItem('profilePicture');
         if (storedProfilePicture) {
-          // Show profile picture and hide placeholder
+          // Replace the img tag to show profile picture
           populatedHtml = populatedHtml.replace(
-            'style="display: none;"',
-            `src="${storedProfilePicture}" style="display: block;"`
+            '<img id="profile-picture" class="profile-picture" src="" alt="Profile Picture" style="display: none;" />',
+            `<img id="profile-picture" class="profile-picture" src="${storedProfilePicture}" alt="Profile Picture" style="display: block;" />`
           );
+          // Hide the placeholder
           populatedHtml = populatedHtml.replace(
-            'class="profile-picture-placeholder"',
-            'class="profile-picture-placeholder" style="display: none;"'
+            '<div class="profile-picture-placeholder" id="profile-picture-placeholder"></div>',
+            '<div class="profile-picture-placeholder" id="profile-picture-placeholder" style="display: none;"></div>'
           );
         } else {
-          // Show placeholder and hide profile picture
+          // Show placeholder with first letter of name
+          const firstLetter = (resumeData.name || 'P').charAt(0).toUpperCase();
           populatedHtml = populatedHtml.replace(
-            'id="profile-picture-placeholder"',
-            'id="profile-picture-placeholder" style="display: block;"'
+            '<div class="profile-picture-placeholder" id="profile-picture-placeholder"></div>',
+            `<div class="profile-picture-placeholder" id="profile-picture-placeholder" style="display: block;">${firstLetter}</div>`
           );
         }
         
@@ -1485,10 +1703,12 @@
         iframe.contentDocument.write(populatedHtml);
         iframe.contentDocument.close();
         
-        // Wait for content to load
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Wait for content to load and styles to apply
+        await new Promise(resolve => setTimeout(resolve, 2000));
         
-        // Generate PDF using html2pdf
+        console.log('Iframe content loaded, starting PDF generation...');
+        
+        // Generate PDF using html2canvas
         const element = iframe.contentDocument.body;
         
         // Use jsPDF with html2canvas for better rendering
@@ -1496,12 +1716,17 @@
         const html2canvas = window.html2canvas;
         
         if (html2canvas) {
+          console.log('Using html2canvas for PDF generation...');
           const canvas = await html2canvas(element, {
             scale: 2,
             useCORS: true,
             allowTaint: true,
-            backgroundColor: '#ffffff'
+            backgroundColor: '#ffffff',
+            width: element.scrollWidth,
+            height: element.scrollHeight
           });
+          
+          console.log('Canvas created, dimensions:', canvas.width, 'x', canvas.height);
           
           const imgData = canvas.toDataURL('image/png');
           const pdf = new jsPDF('p', 'mm', 'a4');
@@ -1797,29 +2022,45 @@
     loadStoredProfilePicture();
     
     // Download PDF button
-    document.getElementById('downloadPdfBtn').addEventListener('click', function() {
-      const outputText = document.getElementById('outputText').textContent;
-      if (!outputText) return;
-      
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ compress: true });
-      doc.setFontSize(12);
-      doc.text("Tailored Resume", 10, 10);
+    document.getElementById('downloadPdfBtn').addEventListener('click', async function() {
+      try {
+        // Check if we have resume data
+        if (!window.currentResumeData) {
+          logProgress("No resume data available. Please generate a resume first.");
+          return;
+        }
+        
+        logProgress("Generating PDF from formatted template...");
+        await generatePDFFromTemplate();
+        logProgress("PDF downloaded successfully.");
+      } catch (error) {
+        console.error('Error generating PDF:', error);
+        logProgress("Error generating PDF from template. Using fallback method.");
+        
+        // Fallback to simple text-based PDF
+        const outputText = document.getElementById('outputText').textContent;
+        if (!outputText) return;
+        
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ compress: true });
+        doc.setFontSize(12);
+        doc.text("Tailored Resume", 10, 10);
 
-      let y = 20;
-      const lineHeight = 8;
-      const maxWidth = 180;
-      const marginTop = 20;
-      const bottom = doc.internal.pageSize.height - 20;
+        let y = 20;
+        const lineHeight = 8;
+        const maxWidth = 180;
+        const marginTop = 20;
+        const bottom = doc.internal.pageSize.height - 20;
 
-      const lines = doc.splitTextToSize(outputText, maxWidth);
-      for (const line of lines) {
-        if (y > bottom) { doc.addPage(); y = marginTop; }
-        doc.text(line, 10, y);
-        y += lineHeight;
+        const lines = doc.splitTextToSize(outputText, maxWidth);
+        for (const line of lines) {
+          if (y > bottom) { doc.addPage(); y = marginTop; }
+          doc.text(line, 10, y);
+          y += lineHeight;
+        }
+
+        doc.save("tailored-resume.pdf");
       }
-
-      doc.save("tailored-resume.pdf");
     });
     
     // Resume preview modal event listeners
@@ -1890,8 +2131,8 @@
         // Parse and populate the HTML template
         await populateResumeTemplate(refinedResume);
         
-        // Display the resume in the output area
-        document.getElementById('outputText').textContent = refinedResume;
+        // Display the formatted resume template in the output area
+        await displayFormattedResume();
         document.getElementById('outputSection').style.display = 'block';
         logProgress("Tailored resume displayed in output area.");
 
